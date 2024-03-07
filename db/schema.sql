@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS 'Pantry_db';
+
+CREATE DATABASE 'Pantry_db';
