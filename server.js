@@ -1,6 +1,7 @@
 // Import required modules
 const express = require('express');
 const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes'); // Import authentication routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -10,6 +11,9 @@ const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Mount authentication routes
+app.use('/auth', authRoutes);
 
 // Define a simple route
 app.get('/', (req, res) => {
