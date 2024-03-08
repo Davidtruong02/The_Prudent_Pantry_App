@@ -2,6 +2,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes'); // Import authentication routes
+const exphbs = require('express-handlebars');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -12,12 +13,16 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
+// Set up Handlebars view engine
+app.engine('.hbs', exphbs({ extname: '.hbs' }));
+app.set('view engine', 'handlebars');
+
 // Mount authentication routes
 app.use('/auth', authRoutes);
 
 // Define a simple route
 app.get('/', (req, res) => {
-    res.send('Hello Server!');
+    res.render('login'); // Render the login.handlebars file
 });
 
 // Define a port for the server to listen on
