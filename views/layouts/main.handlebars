@@ -1,0 +1,22 @@
+<!-- views/layouts/main.handlebars -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <!-- Include CSS stylesheets or other meta tags here -->
+</head>
+<body>
+    {{> header}}
+    
+    <div class="content">
+        {{{body}}}
+    </div>
+
+    {{> footer}}
+    
+    <!-- Include any scripts or additional content here -->
+</body>
+</html>

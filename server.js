@@ -14,8 +14,9 @@ const app = express();
 app.use(express.json());
 
 // Set up Handlebars view engine
-app.engine('.hbs', exphbs({ extname: '.hbs' }));
-app.set('view engine', 'handlebars');
+const hbs = exphbs.create({/* define your options here */});
+app.engine('.handlebars', hbs.engine);
+app.set('view engine', '.handlebars');
 
 // Mount authentication routes
 app.use('/auth', authRoutes);
