@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 
 // Import User model
-const { User } = require('..db/models/');
+const { User } = require('../models/User.js')
 
 // Create a new router instance
 const router = express.Router();
