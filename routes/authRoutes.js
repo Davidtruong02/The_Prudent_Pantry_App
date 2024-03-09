@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 
 // Import User model
-const { User } = require('../models/User.js')
+const User = require('../models/User');
 
 // Create a new router instance
 const router = express.Router();
@@ -40,6 +40,11 @@ router.post('/register', async (req, res) => {
     console.error('Error registering user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
+});
+
+// Signup route
+router.get('/signup', (req, res) => {
+    res.render('signup'); // Render the signup.handlebars file
 });
 
 // Export the router

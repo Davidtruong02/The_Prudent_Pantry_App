@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes'); // Import authentication routes
 const exphbs = require('express-handlebars');
 
+
 // Load environment variables from .env file
 dotenv.config();
 
