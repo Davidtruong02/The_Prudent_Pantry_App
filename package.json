@@ -11,10 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.5",
+    "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
+    "connect-session-sequelize": "^7.1.7",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "express-handlebars": "^7.1.2",
+    "express-session": "^1.18.0",
     "handlebars": "^4.7.8",
     "jest": "^29.7.0",
     "mysql2": "^3.9.2",
