@@ -7,7 +7,7 @@ const app_key = process.env.APP_KEY;
 
 // GET /api/recipe
 router.get('/recipe', async (req, res) => {
-    const { q } = req.query; // Extract the query parameter 'q' from the request
+    const {q} = req.query; // Extract the query parameter 'q' from the request
 
     try {
         const response = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${app_id}&app_key=${app_key}`);
@@ -19,4 +19,6 @@ router.get('/recipe', async (req, res) => {
 });
 
 module.exports = router;
+
+
 
