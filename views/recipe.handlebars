@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,5 +9,19 @@
         <input id="searchInput" type="text" name="q" placeholder="Search for a recipe">
         <button type="submit" value="Search">Search</button>
     </form>
+
+    <!-- Creates cards for each recipe -->
+    <div id="recipeCards">
+        {{#each recipes}}
+            <div class="card">
+                <img src="{{this.image}}" alt="{{this.label}}">
+                <h2>{{this.label}}</h2>
+                <a href="{{this.url}}">View Recipe</a>
+                <p>{{this.ingredientLines}}</p>
+                <button class="save-recipe" data-recipe-id="{{this.id}}">Save Recipe</button>
+                <button class="save-ingredients" data-recipe-id="{{this.id}}">Save Ingredients</button>
+            </div>
+        {{/each}}
+    </div>
 </body>
 </html>

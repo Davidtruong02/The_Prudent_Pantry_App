@@ -17,8 +17,17 @@ Recipe.init(
       type: DataTypes.STRING,
       allowNull: false  
     },
+    ingredients: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    recipieImage: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     user_id: {
       type: DataTypes.INTEGER,
+      allowNull: true, 
       references: {
         model: 'user',
         key: 'id'
