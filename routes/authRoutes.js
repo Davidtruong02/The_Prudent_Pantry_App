@@ -1,50 +1,65 @@
+// authRoutes.js
+
 // Import required modules
 const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-
-// Import User model
-const User = require('../models/User');
-
-// Create a new router instance
 const router = express.Router();
+const User = require('../models/User'); // Adjust the import path as necessary
 
 // Registration route
 router.post('/register', async (req, res) => {
+  const { username, email, password } = req.body;
   try {
-    // Extract user input from request body
-    const { username, email, password } = req.body;
-
-    // Validate user input (e.g., check for required fields)
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    // Check if the username or email is already in use
-    const existingUser = await User.findOne({
-      where: { $or: [{ username }, { email }] },
-    });
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(409).json({ message: 'Username or email already in use' });
+      req.flash('error', 'Email already in use');
+      return res.redirect('/auth/signup');
     }
 
-    // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-    // Create a new user record in the database
-    const newUser = await User.create({ username, email, password: hashedPassword });
-
-    // Redirect the user to the login page or another appropriate page
-    res.status(201).json({ message: 'User registered successfully', user: newUser });
+    req.flash('success', 'You are now registered and can log in');
+    res.redirect('/auth/login');
   } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Registration error:', error);
+    res.redirect('/auth/signup');
   }
 });
 
-// Signup route
+// Login page route
+router.get('/login', (req, res) => {
+  const messages = req.flash('error');
+  res.render('login', { messages: messages.length > 0 ? messages : null });
+});
+
+// Process the login form
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/recipe', // Redirect to the recipe page on successful login
+  failureRedirect: '/auth/login', // Redirect back to the login page if there's an error
+  failureFlash: true // Enable flash messages for login failures
+}));
+
+// Signup page route
 router.get('/signup', (req, res) => {
-    res.render('signup'); // Render the signup.handlebars file
+  // Optional: Pass any messages if necessary
+  const messages = req.flash('success');
+  res.render('signup', { messages: messages.length > 0 ? messages : null });
+});
+
+// New route for the recipe page
+router.get('/recipe', (req, res) => {
+  if(req.isAuthenticated()) {
+      res.render('recipe');
+  } else {
+      // If not authenticated, redirect to the login page
+      res.redirect('/login');
+  }
 });
 
 // Export the router

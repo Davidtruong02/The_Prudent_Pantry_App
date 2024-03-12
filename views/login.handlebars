@@ -1,5 +1,3 @@
-<!-- views/auth/login.handlebars -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,12 +7,20 @@
     <link rel="stylesheet" href="/css/styles.css"> 
 </head>
 <body>
+    {{#if messages}}
+    <div class="alert alert-danger" role="alert">
+        {{#each messages}}
+        <p>{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+
     <div class="container">
         <h2>Login</h2>
-        <form action="/login" method="POST">
+        <form action="/auth/login" method="POST">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="email">Email or Username:</label>
+                <input type="text" id="login" name="login" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
