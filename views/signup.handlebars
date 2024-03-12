@@ -1,14 +1,22 @@
-<!-- signup.handlebars -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
     <h1>Signup</h1>
+<!-- Check if there are success messages -->
+{{#if messages}}
+<div class="alert alert-success" role="alert">
+    {{#each messages}}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
+
     <form action="/auth/register" method="POST">
         <div>
             <label for="username">Username:</label>

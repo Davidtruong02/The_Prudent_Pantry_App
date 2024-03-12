@@ -4,16 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/css/styles.css"> 
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
-    {{#if messages}}
-    <div class="alert alert-danger" role="alert">
-        {{#each messages}}
-        <p>{{this}}</p>
-        {{/each}}
-    </div>
-    {{/if}}
+<!-- Check if there are error messages -->
+{{#if messages.error}}
+<div class="alert alert-danger" role="alert">
+    {{#each messages.error}}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
+
+<!-- Check if there are success messages -->
+{{#if messages.success}}
+<div class="alert alert-success" role="alert">
+    {{#each messages.success}}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
 
     <div class="container">
         <h2>Login</h2>

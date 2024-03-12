@@ -24,7 +24,10 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
     });
 
-    req.flash('success', 'You are now registered and can log in');
+    // Add a flash message for successful registration
+    req.flash('success', 'You have successfully registered. You may now log in.');
+
+    // Redirect to the login page
     res.redirect('/auth/login');
   } catch (error) {
     console.error('Registration error:', error);
@@ -32,8 +35,9 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login page route
+// Login route to display the login form
 router.get('/login', (req, res) => {
+  // Optional: Pass any messages if necessary
   const messages = req.flash('error');
   res.render('login', { messages: messages.length > 0 ? messages : null });
 });
@@ -54,25 +58,15 @@ router.get('/signup', (req, res) => {
 
 // New route for the recipe page
 router.get('/recipe', (req, res) => {
-  if(req.isAuthenticated()) {
-      res.render('recipe');
+  // Check if the user is authenticated
+  if (req.isAuthenticated()) {
+    // If authenticated, render the recipe page
+    res.render('recipe');
   } else {
-      // If not authenticated, redirect to the login page
-      res.redirect('/login');
+    // If not authenticated, redirect to the login page
+    res.redirect('/auth/login');
   }
 });
-
-// Login route to display the login form
-router.get('/login', (req, res) => {
-  res.render('login'); // Render the login.handlebars file
-});
-
-// Process the login form
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/', // Redirect to home page on successful login
-  failureRedirect: '/login', // Redirect back to the login page if there's an error
-  failureFlash: true // Allow flash messages
-}));
 
 // Export the router
 module.exports = router;
