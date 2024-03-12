@@ -10,6 +10,8 @@ const flash = require('connect-flash');
 const exphbs = require('express-handlebars');
 const sequelize = require('./config/connection'); // Adjust as necessary
 const authRoutes = require('./routes/authRoutes'); // Adjust the path to your authRoutes file
+const recipeRoutes = require('./routes/api/recipeRoutes'); // Adjust the path as needed
+
 
 const app = express();
 
@@ -56,6 +58,9 @@ app.get('/recipe', (req, res) => {
 app.get('/', (req, res) => {
     res.render('login'); // Ensure you have a 'home.handlebars' or adjust as needed
 });
+
+app.use('/', recipeRoutes);
+
 
 // Define a port for the server to listen on
 const PORT = process.env.PORT || 3001;
