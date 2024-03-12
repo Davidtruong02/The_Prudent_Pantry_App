@@ -62,5 +62,17 @@ router.get('/recipe', (req, res) => {
   }
 });
 
+// Login route to display the login form
+router.get('/login', (req, res) => {
+  res.render('login'); // Render the login.handlebars file
+});
+
+// Process the login form
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/', // Redirect to home page on successful login
+  failureRedirect: '/login', // Redirect back to the login page if there's an error
+  failureFlash: true // Allow flash messages
+}));
+
 // Export the router
 module.exports = router;

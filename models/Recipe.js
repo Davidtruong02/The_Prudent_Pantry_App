@@ -1,3 +1,4 @@
+
 // models/Recipe.js
 
 const {Model, DataTypes} = require('sequelize');
@@ -15,13 +16,17 @@ Recipe.init(
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false  
+      allowNull: true  
     },
     ingredients: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     recipieImage: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    url: {
       type: DataTypes.TEXT,
       allowNull: true
     },
