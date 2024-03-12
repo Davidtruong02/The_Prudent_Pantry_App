@@ -1,88 +1,74 @@
+// server.js
+
 // Import required modules
 const express = require('express');
-const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes'); // Import authentication routes
-const recipe = require('./routes/api/recipeRoutes');
+const dotenv = require('dotenv').config();
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const passport = require('./config/passport'); // Ensure this path matches your project structure
+const flash = require('connect-flash');
 const exphbs = require('express-handlebars');
+const sequelize = require('./config/connection'); // Adjust as necessary
+const authRoutes = require('./routes/authRoutes'); // Adjust the path to your authRoutes file
+
 const app = express();
 
-const session = require('express-session');
-const sequelize = require('./config/connection');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const models = require('./models');
-
+// Session setup
 const sess = {
-    secret: 'Super secret secret',
-    cookie: {
-      maxAge: 300000,
-      httpOnly: true,
-      secure: false,
-      sameSite: 'strict',
-    },
+    secret: 'Super secret secret', // Use an environment variable for production
+    cookie: {},
     resave: false,
     saveUninitialized: true,
     store: new SequelizeStore({
-      db: sequelize
-    })
-  };
+        db: sequelize,
+    }),
+};
 
-  app.use(session(sess));
+app.use(session(sess));
 
+// Passport and flash messages middleware
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
-// Load environment variables from .env file
-dotenv.config();
-
-
-
-// Middleware to parse JSON bodies
+// Middleware to parse JSON bodies and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-
-// Set up Handlebars view engine
-const hbs = exphbs.create({/* define your options here */});
+// Set up Handlebars as the view engine
+const hbs = exphbs.create({ /* your configuration here */ });
 app.engine('.handlebars', hbs.engine);
 app.set('view engine', '.handlebars');
 
-// Mount authentication routes
+// Apply authRoutes middleware to handle authentication-related routes
 app.use('/auth', authRoutes);
-app.use(recipe);
 
-// Define a simple route
-// app.get('/', (req, res) => {
-//     res.render('login'); // Render the login.handlebars file
-// });
-
-app.get('/', (req, res) => {
-    res.render('recipe'); // Render the login.handlebars file
+// Direct route to /recipe for authenticated users
+app.get('/recipe', (req, res) => {
+    if(req.isAuthenticated()) {
+        res.render('recipe'); // Ensure you have a 'recipe.handlebars' view ready
+    } else {
+        res.redirect('/login'); // Redirect unauthenticated users to login
+    }
 });
 
-// turn on routes
-// app.use(routes);
+// A simple route for the homepage or landing page
+app.get('/', (req, res) => {
+    res.render('login'); // Ensure you have a 'home.handlebars' or adjust as needed
+});
 
 // Define a port for the server to listen on
 const PORT = process.env.PORT || 3001;
 
 // Start the server
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
     app.listen(PORT, () => {
-        console.log('-------------------------------------------------------------------------'); // Line of dashes for visual separation
-        console.log(`Server is running on port ${PORT}`);
-        console.log(`Visit http://localhost:${PORT} in your browser to access the application.`);
+        console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`);
     });
 });
 
-// const server = app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-//     console.log(`Visit http://localhost:${PORT} in your browser to access the application.`);
-// });
-
-// Handle server shutdown
+// Handle server shutdown gracefully
 process.on('SIGINT', () => {
     console.log('Server is shutting down...');
-    server.close(() => {
-        console.log('Server has shut down.');
-        process.exit(0);
-    });
+    process.exit();
 });
