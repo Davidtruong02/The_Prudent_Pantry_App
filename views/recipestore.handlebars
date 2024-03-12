@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Store</title>
+</head>
+<body>
+
+    <div id="recipeStore">
+        <h1>Recipe Store</h1>
+        <form action="/recipestore" method="POST">
+            <div>
+                <h2 for="recipeName">Recipe Name:</h2>
+                <a href="{{this.id}}">{{this.name}}</a>
+            </div>
+            <div>
+                <p for="ingredients">Ingredients:</p>
+            </div>
+            <a href="{{this.url}}">View Recipe</a>
+        </form>
+    </div>
+
+</body>
+</html>
