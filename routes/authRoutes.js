@@ -35,10 +35,11 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login route to display the login form
+// Login page route
 router.get('/login', (req, res) => {
   // Optional: Pass any messages if necessary
   const messages = req.flash('error');
+  console.log('Flash Messages:', messages); // Add this line to check flash messages
   res.render('login', { messages: messages.length > 0 ? messages : null });
 });
 

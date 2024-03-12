@@ -15,16 +15,6 @@
     {{/each}}
 </div>
 {{/if}}
-
-<!-- Check if there are success messages -->
-{{#if messages.success}}
-<div class="alert alert-success" role="alert">
-    {{#each messages.success}}
-    <p>{{this}}</p>
-    {{/each}}
-</div>
-{{/if}}
-
     <div class="container">
         <h2>Login</h2>
         <form action="/auth/login" method="POST">

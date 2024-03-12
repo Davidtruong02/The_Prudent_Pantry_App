@@ -8,15 +8,21 @@
 </head>
 <body>
     <h1>Signup</h1>
-<!-- Check if there are success messages -->
-{{#if messages}}
+{{#if messages.success}}
 <div class="alert alert-success" role="alert">
-    {{#each messages}}
+    {{#each messages.success}}
     <p>{{this}}</p>
     {{/each}}
 </div>
 {{/if}}
 
+{{#if messages.error}}
+<div class="alert alert-danger" role="alert">
+    {{#each messages.error}}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
     <form action="/auth/register" method="POST">
         <div>
             <label for="username">Username:</label>

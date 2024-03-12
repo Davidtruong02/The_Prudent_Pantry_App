@@ -29,10 +29,11 @@ const sess = {
 
 app.use(session(sess));
 
+app.use(flash());
 // Passport and flash messages middleware
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
+
 
 // Middleware to parse JSON bodies and URL-encoded data
 app.use(express.json());
