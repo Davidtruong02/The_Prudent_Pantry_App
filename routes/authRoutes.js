@@ -68,5 +68,24 @@ router.get('/recipe', (req, res) => {
   }
 });
 
+// Route for accessing the recipe store page, requires authentication
+router.get('/recipestore', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render('recipestore', { title: 'Recipe Store' });
+  } else {
+    // Redirect to the login page if the user is not authenticated
+    res.redirect('/auth/login');
+  }
+});
+
+// Route for accessing the shopping list page, requires authentication
+router.get('/shoppinglist', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render('shoppinglist', { title: 'Shopping List' });
+  } else {
+    // Redirect to the login page if the user is not authenticated
+    res.redirect('/auth/login');
+  }
+});
 // Export the router
 module.exports = router;

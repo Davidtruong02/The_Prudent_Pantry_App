@@ -7,25 +7,36 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                {{#if isLoggedIn}}
-                <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
-                {{else}}
-                <li><a href="/auth/login">Login</a></li>
-                <li><a href="/auth/signup">Sign Up</a></li>
-                {{/if}}
-            </ul>
-        </nav>
-        <!-- Logout Form -->
-        {{#if isLoggedIn}}
-        <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}"> <!-- Include CSRF token if you're using CSRF protection -->
-        </form>
-        {{/if}}
-    </header>
+   <header>
+    <nav>
+        <ul>
+            {{#if isLoggedIn}}
+            <li><a href="/">Home</a></li>
+            {{#unless isRecipePage}} <!-- Check if it's not the recipe page -->
+            <li><a href="/recipe">Recipe Search</a></li>
+            {{/unless}}
+            {{#unless isRecipeStorePage}} <!-- Check if it's not the recipe store page -->
+            <li><a href="/auth/recipestore">Recipe Store</a></li>
+            {{/unless}}
+            {{#unless isShoppingListPage}} <!-- Check if it's not the shopping list page -->
+            <li><a href="/auth/shoppinglist">Shopping List</a></li>
+            {{/unless}}
+            <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+            {{else}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+    <!-- Logout Form -->
+    {{#if isLoggedIn}}
+    <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </form>
+    {{/if}}
+</header>
+
+
     
     <div class="content">
         {{{body}}}

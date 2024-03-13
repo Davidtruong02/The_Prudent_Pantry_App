@@ -2,9 +2,9 @@
 {{!< layouts/main}}
 <div class="container">
     <h2>Login</h2>
-    {{#if messages.error}}
+    {{#if errorMessages}}
     <div class="alert alert-danger" role="alert">
-        {{#each messages.error}}
+        {{#each errorMessages}}
         <p>{{this}}</p>
         {{/each}}
     </div>
@@ -20,5 +20,5 @@
         </div>
         <button type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    <p>Don't have an account? <a href="/auth/signup">Sign up</a></p>
 </div>
