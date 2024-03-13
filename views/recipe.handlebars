@@ -9,16 +9,38 @@
     {{#each recipes}}
         <div class="card">
             <img src="{{this.image}}" alt="{{this.label}}">
-            <h2>{{this.label}}</h2>
+            <h2 class="card">{{this.label}}</h2>
             <a href="{{this.url}}" target="_blank">View Recipe</a>
-            <p>Ingredients: {{this.ingredientLines}}</p>
+            <p class="ingredients">Ingredients:</p>
+            <ol class="ingredientLines">
+                {{#each this.ingredientLines}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ol>
             <button class="save-recipe" data-recipe-id="{{this.id}}">Save Recipe</button>
             <button class="save-ingredients" data-recipe-id="{{this.id}}">Save Ingredients</button>
         </div>
     {{/each}}
+
+    <button id="nextPage" data-next-href="{{nextHref}}">Next Page</button>
+
+    <script>
+    document.getElementById('nextPage').addEventListener('click', async () => {
+        // Get the nextHref from the button's data attribute
+        const nextHref = document.getElementById('nextPage').dataset.nextHref;
+
+        // Fetch the next page of recipes
+        const response = await fetch(nextHref);
+        const data = await response.json();
+
+        // Update the page with the new recipes
+        // You'll need to implement this function to match your application's needs
+        updatePage(data);
+    });
+</script>
 </div>
 
-<!-- JavaScript to handle form submission -->
+{{!-- <!-- JavaScript to handle form submission -->
 <script>
     document.getElementById('searchForm').addEventListener('submit', async (event) => {
         event.preventDefault(); // Prevent default form submission
@@ -50,4 +72,4 @@
             console.error('Error fetching recipes:', error);
         }
     });
-</script>
+</script> --}}
