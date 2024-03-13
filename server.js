@@ -59,23 +59,27 @@ app.get('/test-session-secret', (req, res) => {
 });
 
 // Route for handling the recipe search
-app.get('/recipe', async (req, res) => {
-    const { q } = req.query;
+// app.get('/recipe', async (req, res) => {
+//     const { q } = req.query;
 
-    try {
-        // Forward the request to your recipe search route or controller
-        // Here, you can call your recipe search function or API
-        // For now, let's send a simple response
-        res.send(`Searching for recipes with query: ${q}`);
-    } catch (error) {
-        console.error('Error searching recipes:', error);
-        res.status(500).send('Error searching recipes');
-    }
-});
+//     try {
+//         // Forward the request to your recipe search route or controller
+//         // Here, you can call your recipe search function or API
+//         // For now, let's send a simple response
+//         res.send(`Searching for recipes with query: ${q}`);
+//     } catch (error) {
+//         console.error('Error searching recipes:', error);
+//         res.status(500).send('Error searching recipes');
+//     }
+// });
 
 // A simple route for the homepage or landing page
 app.get('/', (req, res) => {
     res.render('home', { title: 'Welcome to The Prudent Pantry' }); // Rendering 'home.handlebars' for homepage
+});
+
+app.get('/recipe', (req, res) => {
+    res.render('recipe');
 });
 
 // Apply recipeRoutes middleware to handle recipe-related APIs

@@ -11,6 +11,14 @@ router.get('/recipe', async (req, res) => {
     const { q } = req.query;
 
     try {
+        
+        // Delete existing recipes for the logged-in user
+        await Recipe.destroy({
+            where: {
+                user_id: req.user.id
+            }
+        });
+        
         const response = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${APP_ID}&app_key=${APP_KEY}&imageSize=REGULAR&field=label&field=image&field=url&field=ingredientLines`);
         console.log(response.data);
 
@@ -28,6 +36,7 @@ router.get('/recipe', async (req, res) => {
                 title: recipe.label,
                 url: recipe.url,
                 ingredients: JSON.stringify(recipe.ingredientLines),
+                user_id: req.user.id,
             });
         }
 

@@ -1,4 +1,3 @@
-
 // models/Recipe.js
 
 const {Model, DataTypes} = require('sequelize');
