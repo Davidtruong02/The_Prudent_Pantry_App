@@ -7,7 +7,7 @@ const passport = require('./config/passport');
 const flash = require('connect-flash');
 const { engine } = require('express-handlebars');
 const sequelize = require('./config/connection');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes'); // Import authRoutes.js
 const recipeRoutes = require('./routes/api/recipeRoutes');
 const morgan = require('morgan');
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 // Session setup
 const sess = {
-    secret: 'Super secret secret', // Use an environment variable for production
+    secret: process.env.SESSION_SECRET || 'Super secret secret', // Use an environment variable for production
     cookie: {},
     resave: false,
     saveUninitialized: true,
@@ -44,7 +44,7 @@ app.engine('handlebars', engine({
 app.set('view engine', 'handlebars');
 
 // Apply authRoutes middleware to handle authentication-related routes
-app.use('/auth', authRoutes);
+app.use('/auth', authRoutes); // Mount authRoutes.js before other routes
 
 app.use((req, res, next) => {
     console.log("Authenticated:", req.isAuthenticated()); // Debugging line
@@ -52,12 +52,24 @@ app.use((req, res, next) => {
     next();
 });
 
-// Direct route to /recipe for authenticated users
-app.get('/recipe', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render('recipe'); // Ensure you have a 'recipe.handlebars' view ready
-    } else {
-        res.redirect('/login'); // Redirect unauthenticated users to login
+// A simple route for testing the session secret
+app.get('/test-session-secret', (req, res) => {
+    const sessionSecret = process.env.SESSION_SECRET || 'Super secret secret';
+    res.send(`Session Secret: ${sessionSecret}`);
+});
+
+// Route for handling the recipe search
+app.get('/recipe', async (req, res) => {
+    const { q } = req.query;
+
+    try {
+        // Forward the request to your recipe search route or controller
+        // Here, you can call your recipe search function or API
+        // For now, let's send a simple response
+        res.send(`Searching for recipes with query: ${q}`);
+    } catch (error) {
+        console.error('Error searching recipes:', error);
+        res.status(500).send('Error searching recipes');
     }
 });
 

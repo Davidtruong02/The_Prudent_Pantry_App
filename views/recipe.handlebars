@@ -1,5 +1,5 @@
 <!-- Search form -->
-<form id="searchForm" action="/recipe" method="GET">
+<form id="searchForm" action="/api/recipe" method="GET">
     <input id="searchInput" type="text" name="q" placeholder="Search for a recipe">
     <button id="searchButton" type="submit" value="Search">Search</button>
 </form>
@@ -17,3 +17,37 @@
         </div>
     {{/each}}
 </div>
+
+<!-- JavaScript to handle form submission -->
+<script>
+    document.getElementById('searchForm').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent default form submission
+        const query = document.getElementById('searchInput').value;
+        try {
+            const response = await fetch(`/api/recipe?q=${query}`);
+            if (response.ok) {
+                const recipes = await response.json();
+                // Render the recipes
+                const recipeCards = document.getElementById('recipeCards');
+                recipeCards.innerHTML = '';
+                recipes.forEach(recipe => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.innerHTML = `
+                        <img src="${recipe.image}" alt="${recipe.label}">
+                        <h2>${recipe.label}</h2>
+                        <a href="${recipe.url}" target="_blank">View Recipe</a>
+                        <p>Ingredients: ${recipe.ingredientLines}</p>
+                        <button class="save-recipe" data-recipe-id="${recipe.id}">Save Recipe</button>
+                        <button class="save-ingredients" data-recipe-id="${recipe.id}">Save Ingredients</button>
+                    `;
+                    recipeCards.appendChild(card);
+                });
+            } else {
+                console.error('Failed to fetch recipes');
+            }
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+        }
+    });
+</script>

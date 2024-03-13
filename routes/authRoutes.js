@@ -61,31 +61,35 @@ router.post('/logout', (req, res) => {
 // Route for the recipe page, demonstrating authenticated access
 router.get('/recipe', (req, res) => {
   if (req.isAuthenticated()) {
-    res.render('recipe', { title: 'Your Recipes' }); // Ensure this path and view name are correct
+    res.render('recipe', { title: 'Recipe Search', isRecipePage: true });
   } else {
     // Redirects to the login page if the user is not authenticated
+    req.flash('error', 'Please log in to access the Recipe page.');
     res.redirect('/auth/login');
   }
 });
 
-// Route for accessing the recipe store page, requires authentication
+// Route for rendering the recipe store page
 router.get('/recipestore', (req, res) => {
   if (req.isAuthenticated()) {
-    res.render('recipestore', { title: 'Recipe Store' });
+    res.render('recipestore', { title: 'Recipe Store', isRecipeStorePage: true });
   } else {
-    // Redirect to the login page if the user is not authenticated
+    // Redirects to the login page if the user is not authenticated
+    req.flash('error', 'Please log in to access the Recipe Store.');
     res.redirect('/auth/login');
   }
 });
 
-// Route for accessing the shopping list page, requires authentication
+// Route for rendering the shopping list page
 router.get('/shoppinglist', (req, res) => {
   if (req.isAuthenticated()) {
-    res.render('shoppinglist', { title: 'Shopping List' });
+    res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true });
   } else {
-    // Redirect to the login page if the user is not authenticated
+    // Redirects to the login page if the user is not authenticated
+    req.flash('error', 'Please log in to access the Shopping list.');
     res.redirect('/auth/login');
   }
 });
+
 // Export the router
 module.exports = router;

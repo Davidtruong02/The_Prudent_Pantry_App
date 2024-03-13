@@ -1,7 +1,6 @@
 //  Purpose: This file is used to connect to the database using Sequelize.
-const Sequelize = require('sequelize');
-
 require('dotenv').config();
+const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -10,7 +9,10 @@ const sequelize = new Sequelize(
     {
         host: 'localhost',
         dialect: 'mysql',
-        port: 3306
+        port: 3306,
+        define: {
+            timestamps: false // Disable timestamps by default
+        }
     }
 );
 

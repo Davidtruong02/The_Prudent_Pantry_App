@@ -3,19 +3,16 @@ const router = express.Router();
 const axios = require('axios');
 const { Recipe } = require('../../models');
 
-const app_id = process.env.APP_ID;
-const app_key = process.env.APP_KEY;
-
+const APP_ID = process.env.APP_ID;
+const APP_KEY = process.env.APP_KEY;
 
 // GET /api/recipe
 router.get('/recipe', async (req, res) => {
-    const {q} = req.query;
+    const { q } = req.query;
 
     try {
-        const response = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${app_id}&app_key=${app_key}&imageSize=REGULAR&field=label&field=image&field=url&field=ingredientLines`);
-
+        const response = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${APP_ID}&app_key=${APP_KEY}&imageSize=REGULAR&field=label&field=image&field=url&field=ingredientLines`);
         console.log(response.data);
-
 
         // Extract the required fields
         const recipes = response.data.hits.map(hit => ({
@@ -30,7 +27,7 @@ router.get('/recipe', async (req, res) => {
             await Recipe.create({
                 title: recipe.label,
                 url: recipe.url,
-                ingredients: JSON.stringify(recipe.ingredientLines),                
+                ingredients: JSON.stringify(recipe.ingredientLines),
             });
         }
 
@@ -42,21 +39,4 @@ router.get('/recipe', async (req, res) => {
     }
 });
 
-// router.post('/clearRecipes', async (req, res) => {
-//     try {
-//         await Recipe.destroy({ where: {}, truncate: false });
-//         res.json({ success: true });
-//     } catch (err) {
-//         console.error(err);
-//         res.json({ success: false });
-//     }
-// });
-
-
-
-
-
 module.exports = router;
-
-
-
