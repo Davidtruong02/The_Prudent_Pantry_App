@@ -1,22 +1,39 @@
-<!-- views/layouts/main.handlebars -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <title>{{pageTitle}}</title>
-    <!-- Include CSS stylesheets or other meta tags here -->
 </head>
 <body>
-    {{> header}}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                {{#if isLoggedIn}}
+                <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                {{else}}
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/signup">Sign Up</a></li>
+                {{/if}}
+            </ul>
+        </nav>
+        <!-- Logout Form -->
+        {{#if isLoggedIn}}
+        <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"> <!-- Include CSRF token if you're using CSRF protection -->
+        </form>
+        {{/if}}
+    </header>
     
     <div class="content">
         {{{body}}}
     </div>
 
-    {{> footer}}
+    <footer>
+        <p>&copy; 2024 The Prudent Pantry. All rights reserved.</p>
+    </footer>
     
     <!-- Include any scripts or additional content here -->
 </body>

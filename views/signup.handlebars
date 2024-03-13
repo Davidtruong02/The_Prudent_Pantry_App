@@ -1,42 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
-</head>
-<body>
-    <h1>Signup</h1>
-{{#if messages.success}}
-<div class="alert alert-success" role="alert">
-    {{#each messages.success}}
-    <p>{{this}}</p>
-    {{/each}}
-</div>
-{{/if}}
-
-{{#if messages.error}}
-<div class="alert alert-danger" role="alert">
-    {{#each messages.error}}
-    <p>{{this}}</p>
-    {{/each}}
-</div>
-{{/if}}
+<!-- signup.handlebars -->
+{{!< layouts/main}}
+<div class="container">
+    <h2>Sign Up</h2>
+    {{#if messages.success}}
+    <div class="alert alert-success" role="alert">
+        {{#each messages.success}}
+        <p>{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{#if messages.error}}
+    <div class="alert alert-danger" role="alert">
+        {{#each messages.error}}
+        <p>{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}} 
     <form action="/auth/register" method="POST">
-        <div>
+        <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
         </div>
-        <div>
+        <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
         </div>
-        <div>
+        <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
         <button type="submit">Sign Up</button>
     </form>
-</body>
-</html>
+    <p>Already have an account? <a href="/login">Login</a></p>
+</div>

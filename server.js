@@ -1,5 +1,3 @@
-// server.js
-
 // Import required modules
 const express = require('express');
 const dotenv = require('dotenv').config();
@@ -7,7 +5,7 @@ const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const passport = require('./config/passport');
 const flash = require('connect-flash');
-const exphbs = require('express-handlebars');
+const { engine } = require('express-handlebars');
 const sequelize = require('./config/connection');
 const authRoutes = require('./routes/authRoutes');
 const recipeRoutes = require('./routes/api/recipeRoutes');
@@ -39,13 +37,20 @@ app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Set up Handlebars as the view engine
-const hbs = exphbs.create({ /* your configuration here */ });
-app.engine('.handlebars', hbs.engine);
-app.set('view engine', '.handlebars');
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+    layoutsDir: __dirname + '/views/layouts/',
+}));
+app.set('view engine', 'handlebars');
 
 // Apply authRoutes middleware to handle authentication-related routes
 app.use('/auth', authRoutes);
+
+app.use((req, res, next) => {
+    console.log("Authenticated:", req.isAuthenticated()); // Debugging line
+    res.locals.isLoggedIn = req.isAuthenticated();
+    next();
+});
 
 // Direct route to /recipe for authenticated users
 app.get('/recipe', (req, res) => {
@@ -58,7 +63,7 @@ app.get('/recipe', (req, res) => {
 
 // A simple route for the homepage or landing page
 app.get('/', (req, res) => {
-    res.render('login'); // Ensure you have a 'home.handlebars' or adjust as needed
+    res.render('home', { title: 'Welcome to The Prudent Pantry' }); // Rendering 'home.handlebars' for homepage
 });
 
 // Apply recipeRoutes middleware to handle recipe-related APIs
