@@ -111,6 +111,10 @@ nav a {
     border-radius: 5px;
 }
 
+nav a.active {
+    background-color: #003e814f;
+}
+
 nav a:hover {
     background-color: #0056b3;
     text-decoration: none;

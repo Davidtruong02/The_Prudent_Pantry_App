@@ -78,9 +78,36 @@ app.get('/', (req, res) => {
     res.render('home', { title: 'Welcome to The Prudent Pantry' }); // Rendering 'home.handlebars' for homepage
 });
 
+
 app.get('/recipe', (req, res) => {
-    res.render('recipe');
+    if (req.isAuthenticated()) {
+      res.render('recipe', { title: 'Recipe Search', isRecipePage: true });
+    } else {
+      // Redirects to the login page if the user is not authenticated
+      req.flash('error', 'Please log in to access the Recipe page.');
+      res.redirect('/auth/login');
+    }
 });
+
+app.get('/recipestore', (req, res) => {
+    if (req.isAuthenticated()) {
+      res.render('recipestore', { title: 'Recipe Store', isRecipeStorePage: true });
+    } else {
+      // Redirects to the login page if the user is not authenticated
+      req.flash('error', 'Please log in to access the Recipe Store.');
+      res.redirect('/auth/login');
+    }
+  });
+
+app.get('/shoppinglist', (req, res) => {
+if (req.isAuthenticated()) {
+    res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true });
+    } else {
+    // Redirects to the login page if the user is not authenticated
+    eq.flash('error', 'Please log in to access the Shopping list.');
+    res.redirect('/auth/login');
+    }
+    });
 
 // Apply recipeRoutes middleware to handle recipe-related APIs
 app.use('/api', recipeRoutes);
