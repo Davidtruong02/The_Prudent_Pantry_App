@@ -8,7 +8,7 @@ const APP_KEY = process.env.APP_KEY;
 
 // GET /api/recipe
 router.get('/recipe', async (req, res) => {
-    const { q } = req.query;
+    const { q, nextHref } = req.query;
 
     try {
         
@@ -19,7 +19,13 @@ router.get('/recipe', async (req, res) => {
             }
         });
         
-        const response = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${APP_ID}&app_key=${APP_KEY}&imageSize=REGULAR&field=label&field=image&field=url&field=ingredientLines`);
+        let requestUrl = `https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${APP_ID}&app_key=${APP_KEY}&imageSize=REGULAR&field=label&field=image&field=url&field=ingredientLines`;
+
+        if (nextHref && !q) {
+            requestUrl = nextHref;
+        }
+
+        const response = await axios.get(requestUrl);
         console.log(response.data);
 
         // Extract the required fields
@@ -41,7 +47,7 @@ router.get('/recipe', async (req, res) => {
         }
 
         // Render the template with the recipes
-        res.render('recipe', { recipes });
+        res.render('recipe', { recipes, nextHref: response.data?._links?.next?.href });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching data from Edamam API');
