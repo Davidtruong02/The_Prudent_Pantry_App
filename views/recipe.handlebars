@@ -36,4 +36,27 @@
         e.preventDefault();
         form.submit();
     });
+
+    
+document.addEventListener('DOMContentLoaded', function() {
+    var saveRecipeButton = document.querySelector('.save-recipe');
+    if (saveRecipeButton) {
+        saveRecipeButton.addEventListener('click', function() {
+            var recipeId = this.getAttribute('data-recipe-id');
+            fetch('/api/recipesave', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: recipeId }),
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        });
+    }
+});
+
+
+
 </script>
