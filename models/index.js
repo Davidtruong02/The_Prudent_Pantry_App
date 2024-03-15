@@ -9,5 +9,5 @@ Recipe.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Recipe, { foreignKey: 'user_id' });
 RecipeStore.belongsTo(User, { foreignKey: 'user_id' });
 
-module.exports = { Recipe, Ingredients, User, RecipeStore };
+module.exports = { Recipe, Ingredients, User, RecipeStore};
 
