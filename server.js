@@ -14,6 +14,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+
 // Session setup
 const sess = {
     secret: process.env.SESSION_SECRET || 'Super secret secret', // Use an environment variable for production
@@ -116,7 +117,7 @@ app.use('/api', recipeRoutes);
 const PORT = process.env.PORT || 3001;
 
 // Start the server
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`);
     });
@@ -127,3 +128,4 @@ process.on('SIGINT', () => {
     console.log('Server is shutting down...');
     process.exit();
 });
+
