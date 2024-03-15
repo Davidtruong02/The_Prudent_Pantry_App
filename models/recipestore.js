@@ -1,4 +1,4 @@
-// models/Recipe.js
+// models/RecipeStore.js
 
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection')
@@ -43,7 +43,7 @@ RecipeStore.init(
         timestamps: false,
         freezeTableName: true,
         underscored: true,
-        modelName: 'recipe',
+        modelName: 'RecipeStore',
     }
 );
 
