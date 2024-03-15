@@ -1,7 +1,8 @@
 const Recipe = require('./Recipe');
 const Ingredients = require('./Ingredients');
 const User = require('./User');
-const RecipeStore = require('./recipestore'); 
+const RecipeStore = require('./RecipeStore');
+
 
 
 Recipe.belongsTo(User, { foreignKey: 'user_id' });

@@ -29,6 +29,10 @@ Recipe.init(
       type: DataTypes.TEXT,
       allowNull: true
     },
+    uri: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: true, 

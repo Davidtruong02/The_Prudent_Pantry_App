@@ -14,6 +14,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+
 // Session setup
 const sess = {
     secret: process.env.SESSION_SECRET || 'Super secret secret', // Use an environment variable for production
@@ -127,3 +128,4 @@ process.on('SIGINT', () => {
     console.log('Server is shutting down...');
     process.exit();
 });
+
