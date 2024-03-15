@@ -116,7 +116,7 @@ app.use('/api', recipeRoutes);
 const PORT = process.env.PORT || 3001;
 
 // Start the server
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: falsew }).then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`);
     });
