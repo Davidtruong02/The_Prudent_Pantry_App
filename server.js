@@ -9,6 +9,8 @@ const { engine } = require('express-handlebars');
 const sequelize = require('./config/connection');
 const authRoutes = require('./routes/authRoutes'); // Import authRoutes.js
 const recipeRoutes = require('./routes/api/recipeRoutes');
+const ingredientRoutes = require('./routes/api/ingredientRoutes');
+const shoppingRoutes = require('./routes/api/shoppingRoutes');
 const morgan = require('morgan');
 const app = express();
 app.use(morgan('dev'));
@@ -32,6 +34,13 @@ app.use(flash());
 // Passport and flash messages middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Define the route that sets the session user ID
+app.get('/setsession/:userid', (req, res) => {
+    const userId = req.params.userid;
+    req.session.user_id = userId;
+    res.send(`Session user ID set to ${userId}`);
+  });
 
 
 // Middleware to parse JSON bodies and URL-encoded data
@@ -105,13 +114,16 @@ if (req.isAuthenticated()) {
     res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true });
     } else {
     // Redirects to the login page if the user is not authenticated
-    eq.flash('error', 'Please log in to access the Shopping list.');
+    req.flash('error', 'Please log in to access the Shopping list.');
     res.redirect('/auth/login');
     }
     });
 
 // Apply recipeRoutes middleware to handle recipe-related APIs
 app.use('/api', recipeRoutes);
+app.use('/', ingredientRoutes);
+app.use('/api', shoppingRoutes);
+
 
 // Define a port for the server to listen on
 const PORT = process.env.PORT || 3001;

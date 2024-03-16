@@ -130,6 +130,11 @@ ol li {
     display: block;
     margin: 0;
     padding: 0;
+    list-style-type: disc;
+}
+
+ol li::marker {
+    color: black;
 }
 
 h2.card, p.ingredients, ol {

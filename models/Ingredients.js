@@ -15,15 +15,24 @@ Ingredients.init(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false  
+      allowNull: true  
     },
     quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.DECIMAL(10.2),
+      allowNull: true,
+      defaultValue: 1
     },
     measure: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true, 
+      references: {
+        model: 'user',
+        key: 'id'
+      }
     },
     recipe_Id: {
       type: DataTypes.INTEGER,

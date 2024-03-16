@@ -10,7 +10,7 @@
     {{#each recipes}}
         <div class="card">
             <img src="{{this.image}}" alt="{{this.label}}">
-            <h2 class="card">{{this.label}}</h2>
+            <h2 class="card">{{this.title}}</h2>
             <a href="{{this.url}}" target="_blank">View Recipe</a>
             <p class="ingredients">Ingredients:</p>
             <ol class="ingredientLines">
@@ -19,7 +19,7 @@
                 {{/each}}
             </ol>
             <button class="save-recipe" data-recipe-id="{{this.id}}">Save Recipe</button>
-            <button class="save-ingredients" data-recipe-id="{{this.id}}">Save Ingredients</button>
+            <button class="save-ingredients" data-recipe-uri="{{this.uri}}">Save Ingredients</button>
         </div>
     {{/each}}
 
@@ -37,25 +37,30 @@
         form.submit();
     });
 
-    
-document.addEventListener('DOMContentLoaded', function() {
-    var saveRecipeButton = document.querySelector('.save-recipe');
-    if (saveRecipeButton) {
-        saveRecipeButton.addEventListener('click', function() {
-            var recipeId = this.getAttribute('data-recipe-id');
-            fetch('/api/recipesave', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: recipeId }),
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('Error:', error));
+//-----------------------------------------------------------------------------//
+
+const saveRecipesButtons = document.querySelectorAll('.save-ingredients');
+
+saveRecipesButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        
+        let uri = this.getAttribute('data-recipe-uri');
+        uri = encodeURIComponent(uri);
+        //pass the uri to ingredients route
+        fetch(`/ingredients?uri=${uri}`, {
+            method: 'GET'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
-    }
+
+    });
 });
+
 
 
 

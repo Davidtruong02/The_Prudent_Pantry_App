@@ -27,7 +27,7 @@ router.get('/recipe', async (req, res) => {
         }
 
         const response = await axios.get(requestUrl);
-        console.log(response.data);
+        // console.log(response);
 
                 // Extract the required fields
                 const recipes = response.data.hits.map(hit => ({
@@ -37,6 +37,8 @@ router.get('/recipe', async (req, res) => {
                     uri: hit.recipe.uri,
                     ingredientLines: hit.recipe.ingredientLines,            
                 }));
+
+                // console.log(recipes);
         
             const savedRecipes = [];
                 // Insert each recipe into the database
@@ -49,8 +51,10 @@ router.get('/recipe', async (req, res) => {
                         uri: recipe.uri,
                     });
 
-                    savedRecipes.push({...savedRecipe.get({ plain: true }), image: recipe.image, ingredientLines: recipe.ingredientLines });
-                    console.log('Saved recipe:', savedRecipe.get({ plain: true }));
+                    // console.log(ingredients);
+
+                    savedRecipes.push({...savedRecipe.get({ plain: true }), image: recipe.image, title: recipe.label, ingredientLines: recipe.ingredientLines });
+                    // console.log('Saved recipe:', savedRecipe.get({ plain: true }));
                 }
 
         // Render the template with the recipes
@@ -60,5 +64,7 @@ router.get('/recipe', async (req, res) => {
         res.status(500).send('Error fetching data from Edamam API');
     }
 });
+
+
 
 module.exports = router;

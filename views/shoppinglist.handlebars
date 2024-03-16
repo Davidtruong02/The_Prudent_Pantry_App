@@ -1,5 +1,9 @@
 <!-- shoppinglist.handlebars -->
-<div class="container">
-    <h2>Shopping List</h2>
-    <p>This is the shopping list page. You can manage your shopping list here.</p>
-</div>
+
+{{#each ingredients}}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{this.name}}</h5>
+        </div>
+    </div>
+{{/each}}
