@@ -47,6 +47,8 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: true // Enable flash messages for login failures
 }));
 
+
+
 // Logout handler
 router.post('/logout', (req, res) => { // Defining a new route for handling logout
   req.logout(function(err) { // Logging out the user

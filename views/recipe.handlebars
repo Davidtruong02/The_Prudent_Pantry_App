@@ -20,7 +20,7 @@
                 {{/each}}
             </ol>
             <button class="save-recipe" data-recipe-id="{{this.id}}">Save Recipe</button>
-            <button class="save-ingredients" data-recipe-id="{{this.id}}">Save Ingredients</button>
+            <button class="save-ingredients" data-ingredient-id="{{this.uri}}">Save Ingredients</button>
         </div>
     {{/each}}
 
@@ -65,4 +65,32 @@
             });
         });
     });
+
+//---------------------------------------------------------------------------------------------------------------//
+//                                     JavaScript code for saving ingredients                                    //  
+//---------------------------------------------------------------------------------------------------------------//
+
+    document.addEventListener('DOMContentLoaded', function() { // Wait for the DOM to load
+        const saveIngredientsButtons = document.querySelectorAll('.save-ingredients'); // Get all "Save Ingredients" buttons
+
+        saveIngredientsButtons.forEach(function(button) { // Add an event listener to each "Save Ingredients" button
+            button.addEventListener('click', function() { // When the button is clicked
+                const uri = this.getAttribute('data-ingredient-id'); // Get the uri from the button's data-recipe-uri attribute
+                console.log('Saving ingredients for recipe with URI:', uri); // Log the recipe URI to the console
+
+                fetch(`/ingredients?uri=${encodeURIComponent(uri)}`, { // Send a POST request to the /api/ingredientRoute endpoint
+                    method: 'GET', // Use the GET method                    
+                })
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => { // Log the response data to the console
+                    console.log('Received response:', data); // Log the response data to the console
+                    alert(data.message); // Display the response message in an alert dialog
+                    // Redirect to recipestore.handlebars after saving
+                    //window.location.href = '/recipestore'; // Redirect to the recipestore page
+                })
+                .catch(error => console.error('Error:', error)); // Log any errors to the console
+            });
+        });
+    });
+
 </script>

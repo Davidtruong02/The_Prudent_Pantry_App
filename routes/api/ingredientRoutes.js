@@ -1,24 +1,64 @@
-app.post('/save-ingredients', (req, res) => {
-  let recipeId = req.body.id;
+const express = require('express');
+const router = express.Router();
+const axios = require('axios');
+const { Ingredients } = require('../../models');
 
-  // Find the recipe with the given ID
-  let recipe = recipes.find(r => r.id === recipeId);
+const APP_ID = process.env.APP_ID;
+const APP_KEY = process.env.APP_KEY;
 
-  if (recipe) {
-      // Parse out the ingredients
-      let ingredients = recipe.ingredientLines;
+// GET /api/ingredients
+router.get('/ingredients', async (req, res) => {
+    //const { uri } = req.query.uri;
+    const uri = encodeURIComponent(req.query.uri);
+    console.log('Here is the uri: ',uri);
 
-      // Save the ingredients to the ingredients table in the database
-      db.run('INSERT INTO ingredients (name, quantity, measure, recipe_id) VALUES (?, ?, ?, ?)', [name, quantity, measure, recipeId], function(err) {
-          if (err) {
-              res.status(500).json({ error: 'Failed to save ingredients' });
-          }
-      });
-      // Replace the comment below with your own code to save the ingredients
-      // saveIngredientsToDatabase(ingredients);
+    try {
+        const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=${uri}&app_id=${APP_ID}&app_key=${APP_KEY}&field=ingredients`;
 
-      res.json({ success: true });
-  } else {
-      res.status(404).json({ error: 'Recipe not found' });
-  }
+        const response = await axios.get(url);
+        console.log('Here is the encoded URI: ',url);
+
+        // Extract the required fields from the API response and create an array of objects
+        const ingredientsData = response.data.hits[0].recipe.ingredients;
+        if (!ingredientsData) {
+            console.error('Ingredients not found');
+            return res.status(404).json({ error: 'Ingredients not found' });
+        }
+        const ingredients = ingredientsData.map(ingredient => ({
+            food: ingredient.food,
+            measure: ingredient.measure,
+            quantity: ingredient.quantity,
+        }));
+
+        // Insert each ingredient into the database
+        for (const ingredient of ingredients) {
+            await Ingredients.create({
+                name: ingredient.food,
+                measure: ingredient.measure,
+                quantity: ingredient.quantity,
+                user_id: req.user.id,
+                recipe_id: req.query.recipe_id,
+            });
+        }
+
+
+        res.json(ingredients);
+        console.log(ingredients);
+
+
+    } catch (error) {
+        console.error(error); // Log the error to the console
+        return res.status(500).json({ error: 'Error fetching ingredients' });
+    }
 });
+
+module.exports = router;
+
+
+
+
+
+
+    
+
+
