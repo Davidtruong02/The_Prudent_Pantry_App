@@ -1,131 +1,155 @@
 // Import required modules
-const express = require('express');
-const dotenv = require('dotenv').config();
-const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const passport = require('./config/passport');
-const flash = require('connect-flash');
-const { engine } = require('express-handlebars');
-const sequelize = require('./config/connection');
-const authRoutes = require('./routes/authRoutes'); // Import authRoutes.js
-const recipeRoutes = require('./routes/api/recipeRoutes');
-const morgan = require('morgan');
-const app = express();
-app.use(morgan('dev'));
-app.use(express.static('public'));
+const express = require('express'); // Import the express module
+const bodyParser = require('body-parser'); // Import the body-parser module
+const session = require('express-session'); // Import the express-session module
+const SequelizeStore = require('connect-session-sequelize')(session.Store); // Import the connect-session-sequelize module
+const passport = require('./config/passport'); // Import the passport module
+const flash = require('connect-flash'); // Import the connect-flash module
+const { engine } = require('express-handlebars'); // Import the express-handlebars module
+const morgan = require('morgan'); // Import the morgan module
+const sequelize = require('./config/connection'); // Import the connection module
+const authRoutes = require('./routes/authRoutes'); // Import the authRoutes module
+const recipeRoutes = require('./routes/api/recipeRoutes'); // Import the recipeRoutes module
+const Recipe = require('./models/Recipe'); // Import the Recipe model
+const RecipeStore = require('./models/RecipeStore'); // Import the RecipeStore model
+const recipeStoreRouter = require('./routes/api/recipeStoreRoute');
 
+// Create Express app
+const app = express(); // Create an instance of the express module
+
+// Middleware setup
+app.use(bodyParser.json()); // Use the body-parser middleware to parse the request body
+app.use(bodyParser.urlencoded({ extended: false })); // Use the body-parser middleware to parse the request body
+app.use(morgan('dev')); // Use the morgan middleware to log HTTP requests
+app.use(express.static('public')); // Use the express.static middleware to serve static files from the public directory
 
 // Session setup
-const sess = {
-    secret: process.env.SESSION_SECRET || 'Super secret secret', // Use an environment variable for production
-    cookie: {},
-    resave: false,
-    saveUninitialized: true,
-    store: new SequelizeStore({
-        db: sequelize,
+const sess = { // Set the session options
+    secret: process.env.SESSION_SECRET || 'Super secret secret', // Set the session secret
+    cookie: {}, // Set the session cookie options
+    resave: false, // Set the session resave option
+    saveUninitialized: true, // Set the session saveUninitialized option
+    store: new SequelizeStore({ // Set the session store
+        db: sequelize, // Set the session store database
     }),
 };
+app.use(session(sess)); // Use the express-session middleware with the session options
+app.use(flash()); // Use the connect-flash middleware to display flash messages
 
-app.use(session(sess));
+// Passport initialization
+app.use(passport.initialize()); // Use the passport middleware to initialize passport
+app.use(passport.session()); // Use the passport middleware to initialize passport session
 
-app.use(flash());
-// Passport and flash messages middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
-
-// Middleware to parse JSON bodies and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.engine('handlebars', engine({
-    defaultLayout: 'main',
-    layoutsDir: __dirname + '/views/layouts/',
+// Handlebars setup
+app.engine('handlebars', engine({ // Set the handlebars engine options
+    defaultLayout: 'main', // Set the handlebars default layout
+    layoutsDir: __dirname + '/views/layouts/', // Set the handlebars layout directory
 }));
-app.set('view engine', 'handlebars');
+app.set('view engine', 'handlebars'); // Set the view engine to handlebars
 
-// Apply authRoutes middleware to handle authentication-related routes
-app.use('/auth', authRoutes); // Mount authRoutes.js before other routes
-
-app.use((req, res, next) => {
-    console.log("Authenticated:", req.isAuthenticated()); // Debugging line
-    res.locals.isLoggedIn = req.isAuthenticated();
-    next();
+// Global middleware for session and authentication status
+app.use((req, res, next) => { // Use a middleware to log the session ID and authentication status
+    console.log("Session ID:", req.sessionID); // Log the session ID
+    console.log("Authenticated:", req.isAuthenticated()); // Log the authentication status
+    res.locals.isLoggedIn = req.isAuthenticated(); // Set the isLoggedIn local variable to the authentication status
+    next(); // Call the next middleware
 });
 
-// A simple route for testing the session secret
-app.get('/test-session-secret', (req, res) => {
-    const sessionSecret = process.env.SESSION_SECRET || 'Super secret secret';
-    res.send(`Session Secret: ${sessionSecret}`);
-});
-
-// Route for handling the recipe search
-// app.get('/recipe', async (req, res) => {
-//     const { q } = req.query;
-
-//     try {
-//         // Forward the request to your recipe search route or controller
-//         // Here, you can call your recipe search function or API
-//         // For now, let's send a simple response
-//         res.send(`Searching for recipes with query: ${q}`);
-//     } catch (error) {
-//         console.error('Error searching recipes:', error);
-//         res.status(500).send('Error searching recipes');
-//     }
-// });
-
-// A simple route for the homepage or landing page
-app.get('/', (req, res) => {
-    res.render('home', { title: 'Welcome to The Prudent Pantry' }); // Rendering 'home.handlebars' for homepage
-});
-
-
-app.get('/recipe', (req, res) => {
-    if (req.isAuthenticated()) {
-      res.render('recipe', { title: 'Recipe Search', isRecipePage: true });
-    } else {
-      // Redirects to the login page if the user is not authenticated
-      req.flash('error', 'Please log in to access the Recipe page.');
-      res.redirect('/auth/login');
-    }
-});
-
-app.get('/recipestore', (req, res) => {
-    if (req.isAuthenticated()) {
-      res.render('recipestore', { title: 'Recipe Store', isRecipeStorePage: true });
-    } else {
-      // Redirects to the login page if the user is not authenticated
-      req.flash('error', 'Please log in to access the Recipe Store.');
-      res.redirect('/auth/login');
-    }
-  });
-
-app.get('/shoppinglist', (req, res) => {
-if (req.isAuthenticated()) {
-    res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true });
-    } else {
-    // Redirects to the login page if the user is not authenticated
-    eq.flash('error', 'Please log in to access the Shopping list.');
-    res.redirect('/auth/login');
-    }
-    });
-
-// Apply recipeRoutes middleware to handle recipe-related APIs
-app.use('/api', recipeRoutes);
-
-// Define a port for the server to listen on
-const PORT = process.env.PORT || 3001;
+// Routes setup
+app.use('/auth', authRoutes); // Use the authRoutes module for authentication-related routes
+app.get('/', (req, res) => res.render('home', { title: 'Welcome to The Prudent Pantry' })); // Home page route
+app.get('/recipe', isAuthenticated, (req, res) => res.render('recipe', { title: 'Recipe Search', isRecipePage: true })); // Recipe search page route
+app.get('/recipesaved', isAuthenticated, (req, res) => res.render('recipesaved', { title: 'Saved Recipes', isRecipeSavedPage: true })); // Recipe saved page route
+app.post('/api/recipesave', saveRecipe); // Save recipe route
+app.get('/recipestore', getRecipeStore); // Recipe store page route
+app.post('/api/store-search-results', storeSearchResults); // Store search results route
+app.get('/api/display-search-results', displaySearchResults); // Display search results route
+app.get('/api/clear-search-results', clearSearchResults); // Clear search results route
+app.get('/shoppinglist', isAuthenticated, (req, res) => res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true })); // Shopping list page route
+app.use('/api', recipeRoutes); // Recipe-related APIs
+app.use('/api', recipeStoreRouter);
 
 // Start the server
-sequelize.sync({ force: false }).then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`);
+const PORT = process.env.PORT || 3001; // Set the server port
+sequelize.sync({ force: false }).then(() => { // Sync the database and start the server
+    app.listen(PORT, () => { // Start the server
+        console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`); // Log a message to the console
     });
 });
 
-// Handle server shutdown gracefully
-process.on('SIGINT', () => {
-    console.log('Server is shutting down...');
-    process.exit();
+// Graceful server shutdown
+process.on('SIGINT', () => { // Listen for the SIGINT signal
+    console.log('Server is shutting down...'); // Log a message to the console
+    process.exit(); // Exit the process
 });
 
+// Middleware to check if user is authenticated
+function isAuthenticated(req, res, next) { // Middleware to check if the user is authenticated
+    if (req.isAuthenticated()) { // If the user is authenticated
+        return next(); // Call the next middleware
+    }
+    req.flash('error', 'Please log in to access this page.'); // Display an error message
+    res.redirect('/auth/login'); // Redirect the user to the login page
+}
+
+// Route handler to save a recipe to the recipestore table
+async function saveRecipe(req, res) {
+    try {
+        const { id } = req.body;
+        const recipe = await Recipe.findByPk(id);
+        if (recipe) {
+            const clonedRecipeData = { ...recipe.toJSON(), id: null };
+            const savedRecipe = await RecipeStore.create(clonedRecipeData);
+            res.status(200).json({ message: 'Recipe saved successfully', savedRecipe });
+        } else {
+            res.status(404).json({ error: 'Recipe not found' });
+        }
+    } catch (error) {
+        console.error('Error saving recipe:', error);
+        res.status(500).json({ error: 'An error occurred while saving the recipe' });
+    }
+}
+
+// Route handler to render the recipe store page
+async function getRecipeStore(req, res) {
+    try {
+        console.log('Fetching recipes from RecipeStore...');
+
+        const recipesaved = await RecipeStore.findAll();
+        console.log('Fetched recipes:', recipesaved);
+
+        const searchResults = req.session.searchResults;
+        const data = {
+            recipesaved,
+            searchResults,
+            title: 'Recipe Store',
+            isRecipeStorePage: true
+        };
+        res.render('recipestore', data);
+    } catch (error) {
+        console.error('Error fetching recipes:', error);
+        res.status(500).send('An error occurred while fetching recipes');
+    }
+}
+
+// Route handler to store search results in session
+function storeSearchResults(req, res) {
+    const { searchResults } = req.body;
+    req.session.searchResults = searchResults;
+    res.json({ message: 'Search results stored successfully' });
+}
+
+// Route handler to display stored search results
+function displaySearchResults(req, res) {
+    if (req.session.searchResults) {
+        res.json({ searchResults: req.session.searchResults });
+    } else {
+        res.json({ message: 'No stored search results found' });
+    }
+}
+
+// Route handler to clear stored search results
+function clearSearchResults(req, res) {
+    req.session.searchResults = null;
+    res.json({ message: 'Stored search results cleared successfully' });
+}

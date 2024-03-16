@@ -15,9 +15,13 @@
             {{#if isLoggedIn}}
             <li><a href="/">Home</a></li>
             <li><a href="/recipe" {{#if isRecipePage}}class="active"{{/if}}>Recipe Search</a></li>
-            <li><a href="/recipestore" {{#if isRecipeStorePage}}class="active"{{/if}}>Recipe Store</a></li>
+            <li><a href="/api/recipestore" {{#if isRecipeStorePage}}class="active"{{/if}}>Recipe Store</a></li>
             <li><a href="/shoppinglist" {{#if isShoppingListPage}}class="active"{{/if}}>Shopping List</a></li>
             <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+            <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
+                <!-- CSRF protection if needed -->
+                {{ csrfField }}
+            </form>
             {{else}}
             <li><a href="/">Home</a></li>
             <li><a href="/auth/login" {{#if isLoginPage}}class="active"{{/if}}>Login</a></li>
@@ -25,6 +29,7 @@
         </ul>
     </nav>
     
+
     <!-- Logout Form -->
     {{#if isLoggedIn}}
     <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">

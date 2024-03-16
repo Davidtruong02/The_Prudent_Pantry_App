@@ -1,42 +1,42 @@
 // authRoutes.js
 
 // Import required modules
-const express = require('express');
-const bcrypt = require('bcrypt');
-const passport = require('passport');
-const router = express.Router();
-const User = require('../models/User'); // Adjust the import path as necessary
-const authController = require('../controllers/authController'); // Ensure this path is correct
+const express = require('express'); // Importing Express framework
+const bcrypt = require('bcrypt'); // Importing bcrypt for password hashing
+const passport = require('passport'); // Importing Passport.js for authentication
+const router = express.Router(); // Creating a new router instance
+const User = require('../models/User'); // Importing the User model (adjust path if necessary)
+const authController = require('../controllers/authController.js'); // Importing the authController
 
 // Display login form
-router.get('/login', authController.getLogin);
+router.get('/login', authController.getLogin); // Defining a new route for displaying the login form
 
 // Display signup form
-router.get('/signup', authController.getSignup);
+router.get('/signup', authController.getSignup); // Defining a new route for displaying the signup form
 
 // Process registration
-router.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
+router.post('/register', async (req, res) => { // Defining a new route for processing registration
+  const { username, email, password } = req.body; // Extracting username, email, and password from request body
   try {
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await User.findOne({ where: { email } }); // Checking if the email already exists
     if (existingUser) {
-      req.flash('error', 'Email already in use');
-      return res.redirect('/auth/signup');
+      req.flash('error', 'Email already in use. Please sign in.'); // Flash error message if email is already in use
+      return res.redirect('/auth/signup'); // Redirecting to signup page
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
+    const hashedPassword = await bcrypt.hash(password, 10); // Hashing the password
+    await User.create({ // Creating a new user with hashed password
+      username, // Storing the username
+      email, // Storing the email
+      password: hashedPassword, // Storing the hashed password
+    }); // Creating a new user with hashed password
 
-    req.flash('success', 'You have successfully registered. You may now log in.');
-    res.redirect('/auth/login');
+    req.flash('success', 'You have successfully registered. You may now log in.'); // Flash success message for registration
+    res.redirect('/auth/login'); // Redirecting to login page after successful registration
   } catch (error) {
-    console.error('Registration error:', error);
-    req.flash('error', 'An error occurred during registration.');
-    res.redirect('/auth/signup');
+    console.error('Registration error:', error); // Logging registration error
+    req.flash('error', 'An error occurred during registration.'); // Flash error message for registration error
+    res.redirect('/auth/signup'); // Redirecting to signup page in case of error
   }
 });
 
@@ -48,48 +48,15 @@ router.post('/login', passport.authenticate('local', {
 }));
 
 // Logout handler
-router.post('/logout', (req, res) => {
-  req.logout(function(err) {
-    if (err) { return next(err); }
-    req.session.destroy(() => {
-      res.clearCookie('connect.sid', { path: '/' });
-      res.redirect('/auth/login');
+router.post('/logout', (req, res) => { // Defining a new route for handling logout
+  req.logout(function(err) { // Logging out the user
+    if (err) { return next(err); } // Handling logout error
+    req.session.destroy(() => { // Destroying the session
+      res.clearCookie('connect.sid', { path: '/' }); // Clearing session and cookie
+      res.redirect('/auth/login'); // Redirecting to login page after logout
     });
   });
 });
 
-// // Route for the recipe page, demonstrating authenticated access
-// router.get('/recipe', (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.render('recipe', { title: 'Recipe Search', isRecipePage: true });
-//   } else {
-//     // Redirects to the login page if the user is not authenticated
-//     req.flash('error', 'Please log in to access the Recipe page.');
-//     res.redirect('/auth/login');
-//   }
-// });
-
-// Route for rendering the recipe store page
-// router.get('/recipestore', (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.render('recipestore', { title: 'Recipe Store', isRecipeStorePage: true });
-//   } else {
-//     // Redirects to the login page if the user is not authenticated
-//     req.flash('error', 'Please log in to access the Recipe Store.');
-//     res.redirect('/auth/login');
-//   }
-// });
-
-// Route for rendering the shopping list page
-// router.get('/shoppinglist', (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true });
-//   } else {
-//     // Redirects to the login page if the user is not authenticated
-//     req.flash('error', 'Please log in to access the Shopping list.');
-//     res.redirect('/auth/login');
-//   }
-// });
-
 // Export the router
-module.exports = router;
+module.exports = router; // Exporting the router containing the defined routes

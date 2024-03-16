@@ -21,7 +21,7 @@ Recipe.init(
       type: DataTypes.TEXT,
       allowNull: true
     },
-    recipieImage: {
+    recipeImage: {
       type: DataTypes.TEXT,
       allowNull: true
     },
