@@ -11,3 +11,13 @@ module.exports = (req, res, next) => {
     }
   };
   
+
+  app.use((req, res, next) => {
+    if (req.user) {
+        const userId = req.user.id; // Get the user ID and store it in a variable called userId
+
+        // Now you can use the userId in your middleware
+    }
+
+    next();
+});

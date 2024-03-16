@@ -13,6 +13,12 @@ const recipeRoutes = require('./routes/api/recipeRoutes'); // Import the recipeR
 const Recipe = require('./models/Recipe'); // Import the Recipe model
 const RecipeStore = require('./models/RecipeStore'); // Import the RecipeStore model
 const recipeStoreRouter = require('./routes/api/recipeStoreRoute');
+const ingredientRoutes = require('./routes/api/ingredientRoutes'); // Import the ingredientRoutes module
+const shoppingListRoutes = require('./routes/api/shoppingListRoutes'); // Import the shoppingListRoutes module
+const ShoppingList = require('./models/ShoppingList'); // Import the ShoppingList model
+const Ingredients = require('./models/Ingredients'); // Import the Ingredients model
+
+
 
 // Create Express app
 const app = express(); // Create an instance of the express module
@@ -22,6 +28,20 @@ app.use(bodyParser.json()); // Use the body-parser middleware to parse the reque
 app.use(bodyParser.urlencoded({ extended: false })); // Use the body-parser middleware to parse the request body
 app.use(morgan('dev')); // Use the morgan middleware to log HTTP requests
 app.use(express.static('public')); // Use the express.static middleware to serve static files from the public directory
+app.use(express.json())
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ where: { username } });
+    if (user && user.validPassword(password)) {
+        req.session.userId = user.id; // Set userId in the session
+        console.log('Here is the userId: ', req.session.userId)
+        // res.redirect('/shoppingList');
+    } else {
+        res.status(401).json({ message: 'Invalid username or password' });
+    }
+});
+
 
 // Session setup
 const sess = { // Set the session options
@@ -35,10 +55,13 @@ const sess = { // Set the session options
 };
 app.use(session(sess)); // Use the express-session middleware with the session options
 app.use(flash()); // Use the connect-flash middleware to display flash messages
+// Set up session middleware
+
 
 // Passport initialization
 app.use(passport.initialize()); // Use the passport middleware to initialize passport
 app.use(passport.session()); // Use the passport middleware to initialize passport session
+
 
 // Handlebars setup
 app.engine('handlebars', engine({ // Set the handlebars engine options
@@ -55,6 +78,7 @@ app.use((req, res, next) => { // Use a middleware to log the session ID and auth
     next(); // Call the next middleware
 });
 
+
 // Routes setup
 app.use('/auth', authRoutes); // Use the authRoutes module for authentication-related routes
 app.get('/', (req, res) => res.render('home', { title: 'Welcome to The Prudent Pantry' })); // Home page route
@@ -65,9 +89,15 @@ app.get('/recipestore', getRecipeStore); // Recipe store page route
 app.post('/api/store-search-results', storeSearchResults); // Store search results route
 app.get('/api/display-search-results', displaySearchResults); // Display search results route
 app.get('/api/clear-search-results', clearSearchResults); // Clear search results route
-app.get('/shoppinglist', isAuthenticated, (req, res) => res.render('shoppinglist', { title: 'Shopping List', isShoppingListPage: true })); // Shopping list page route
+// app.get('/shoppingList', isAuthenticated, (req, res) => res.render('shoppingList', { title: 'Shopping List', isShoppingListPage: true })); // Shopping list page route
+app.use('/shoppingList', require('./routes/api/shoppingListRoutes')); // Use the shoppingListRoutes module for shopping list-related routes
+
+
+
 app.use('/api', recipeRoutes); // Recipe-related APIs
 app.use('/api', recipeStoreRouter);
+app.use('/api', ingredientRoutes); // Ingredient-related APIs
+app.use('/api', shoppingListRoutes); // Shopping list-related APIs
 
 // Start the server
 const PORT = process.env.PORT || 3001; // Set the server port
@@ -110,7 +140,7 @@ async function saveRecipe(req, res) {
     }
 }
 
-// Route handler to render the recipe store page
+// // Route handler to render the recipe store page
 async function getRecipeStore(req, res) {
     try {
         console.log('Fetching recipes from RecipeStore...');
