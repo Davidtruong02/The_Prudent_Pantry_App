@@ -20,7 +20,7 @@ router.get('/recipe', async (req, res) => { // Defining a new route for fetching
 
         // Constructing the request URL for fetching recipes from the Edamam API
         let requestUrl = `https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${APP_ID}&app_key=${APP_KEY}&imageSize=REGULAR&field=label&field=image&field=url&field=ingredientLines&field=uri`;
-
+        // console.log('Request URL:', requestUrl);  // Logging the request URL
         // Handling pagination by checking if there's a nextHref and no specific query
         if (nextHref && !q) {   // If there's a nextHref and no specific query
             requestUrl = nextHref;  // Using the nextHref as the request URL
@@ -38,12 +38,14 @@ router.get('/recipe', async (req, res) => { // Defining a new route for fetching
             uri: hit.recipe.uri,    // Including the uri field
             ingredientLines: hit.recipe.ingredientLines,    // Including the ingredientLines field
         }));
+        console.log('Fetched recipes:', recipes);   // Logging the fetched recipes to the console
 
         const savedRecipes = [];    // Creating an empty array to store the saved recipes
         // Inserting each recipe into the database and collecting them in the savedRecipes array
         for (const recipe of recipes) { // Looping over the recipes array
             const savedRecipe = await Recipe.create({   // Creating a new recipe in the database
                 title: recipe.title, // Using the title field for database insertion
+                recipeImage: recipe.image, // Using the image field for database insertion
                 url: recipe.url,    // Using the url field for database insertion
                 ingredients: JSON.stringify(recipe.ingredientLines),    // Using the ingredientLines field for database insertion
                 user_id: req.user.id,   // Using the logged-in user's ID for database insertion
