@@ -15,7 +15,7 @@ const RecipeStore = require('./models/RecipeStore'); // Import the RecipeStore m
 const recipeStoreRouter = require('./routes/api/recipeStoreRoute');
 const ingredientRoutes = require('./routes/api/ingredientRoutes'); // Import the ingredientRoutes module
 const shoppingListRoutes = require('./routes/api/shoppingListRoutes'); // Import the shoppingListRoutes module
-const ShoppingList = require('./models/ShoppingList'); // Import the ShoppingList model
+const ShoppingList = require('./models/shoppingList'); // Import the ShoppingList model
 const Ingredients = require('./models/Ingredients'); // Import the Ingredients model
 
 
@@ -96,7 +96,7 @@ app.use('/shoppingList', require('./routes/api/shoppingListRoutes')); // Use the
 
 app.use('/api', recipeRoutes); // Recipe-related APIs
 app.use('/api', recipeStoreRouter);
-app.use('/api', ingredientRoutes); // Ingredient-related APIs
+app.use(ingredientRoutes); // Ingredient-related APIs
 app.use('/api', shoppingListRoutes); // Shopping list-related APIs
 
 // Start the server

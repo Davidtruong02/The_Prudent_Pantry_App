@@ -6,11 +6,11 @@ const { Ingredients } = require('../../models'); // Replace '../models' with the
 
 
 async function getIngredients(req) {
-    const userId = req.session.userId; // Get userId from the session
+    const userId = req.user.id // Get userId from the session
     console.log('Here is the userId: ', userId)
     return await Ingredients.findAll({
         where: {
-            user_id: 1
+            user_id: userid
         },
         attributes: ['name']
     });
