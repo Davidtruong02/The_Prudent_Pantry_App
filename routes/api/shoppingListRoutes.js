@@ -10,7 +10,7 @@ async function getIngredients(req) {
     console.log('Here is the userId: ', userId)
     return await Ingredients.findAll({
         where: {
-            user_id: userid
+            user_id: req.user.id,
         },
         attributes: ['name']
     });
