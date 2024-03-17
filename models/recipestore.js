@@ -1,4 +1,4 @@
-// models/Recipe.js
+// models/Recipestore.js
 
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection')

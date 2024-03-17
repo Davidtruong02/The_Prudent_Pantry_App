@@ -15,7 +15,7 @@
             {{#if isLoggedIn}}
             <li><a href="/">Home</a></li>
             <li><a href="/recipe" {{#if isRecipePage}}class="active"{{/if}}>Recipe Search</a></li>
-            <li><a href="/api/recipestore" {{#if isRecipeStorePage}}class="active"{{/if}}>Recipe Store</a></li>
+            <li><a href="/recipestore" {{#if isRecipeStorePage}}class="active"{{/if}}>Recipe Store</a></li>
             <li><a href="/shoppingList/{{userid}}" {{#if isShoppingListPage}}class="active"{{/if}}>Shopping List</a></li>
             <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
             <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
