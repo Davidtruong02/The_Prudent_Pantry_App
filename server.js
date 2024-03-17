@@ -19,7 +19,6 @@ const ShoppingList = require('./models/shoppingList'); // Import the ShoppingLis
 const Ingredients = require('./models/Ingredients'); // Import the Ingredients model
 
 
-
 // Create Express app
 const app = express(); // Create an instance of the express module
 
@@ -98,6 +97,24 @@ app.use('/api', recipeRoutes); // Recipe-related APIs
 app.use('/api', recipeStoreRouter);
 app.use(ingredientRoutes); // Ingredient-related APIs
 app.use('/api', shoppingListRoutes); // Shopping list-related APIs
+
+app.delete('/api/recipe/:id', (req, res) => {
+    const recipeId = req.params.id; // Move this line inside the route handler
+
+    // Example: Delete the recipe from the database
+    RecipeStore.findByIdAndDelete(recipeId, (err, deletedRecipe) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (!deletedRecipe) {
+            return res.status(404).json({ error: 'Recipe not found' });
+        }
+
+        // Send a success response
+        res.status(200).json({ message: 'Recipe deleted successfully' });
+    });
+});
 
 // Start the server
 const PORT = process.env.PORT || 3001; // Set the server port
