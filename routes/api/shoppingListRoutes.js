@@ -7,10 +7,10 @@ const { Ingredients } = require('../../models'); // Replace '../models' with the
 
 async function getIngredients(req) {
     const userId = req.user.id // Get userId from the session
-    console.log('Here is the userId: ', userId)
+    // console.log('Here is the userId: ', userId)
     return await Ingredients.findAll({
         where: {
-            user_id: userid
+            user_id: req.user.id
         },
         attributes: ['name']
     });
