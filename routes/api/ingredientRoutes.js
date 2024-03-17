@@ -8,7 +8,8 @@ const APP_KEY = process.env.APP_KEY;
 
 // GET /api/ingredients
 router.get('/ingredients', async (req, res) => {
-    //const { uri } = req.query.uri;
+    // console.log('Save ingredients route handler called')
+    //const uri  = req.query.uri;
     const uri = encodeURIComponent(req.query.uri);
     console.log('Here is the uri: ',uri);
 
