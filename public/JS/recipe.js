@@ -24,3 +24,25 @@ document.addEventListener('DOMContentLoaded', function() { // Wait for the DOM t
         });
     });
 });
+
+//---------------------------------------------------------------------------------------------------------------//
+//                                     JavaScript code for saving ingredients                                    //  
+//---------------------------------------------------------------------------------------------------------------//
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const saveIngredientsButton = document.querySelectorAll('.save-ingredients');
+
+    saveIngredientsButton.forEach(button => {
+        button.addEventListener('click', async(e) => {
+            alert('Ingredients have been added to the shopping list');
+            try{
+                let uri = button.getAttribute("data-ingredient-id");
+                let response = await fetch(`/ingredients?uri=${encodeURIComponent(uri)}`);
+                let data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
