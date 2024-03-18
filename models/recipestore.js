@@ -43,7 +43,7 @@ RecipeStore.init(
         timestamps: false,
         freezeTableName: true,
         underscored: true,
-        modelName: 'recipestore',
+        modelName: 'RecipeStore',
     }
 );
 
