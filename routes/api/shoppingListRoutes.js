@@ -6,13 +6,13 @@ const { Ingredients } = require('../../models'); // Replace '../models' with the
 
 
 async function getIngredients(req) {
-    const userId = req.user.id // Get userId from the session
+    const userId = req.user?.id || req.body?.user?.id; // Get userId from the session
     // console.log('Here is the userId: ', userId)
     return await Ingredients.findAll({
         where: {
             user_id: userId
         },
-        attributes: ['name']
+        attributes: ['id', 'name']
     });
 }
 
@@ -20,7 +20,14 @@ router.get('/', async (req, res) => {
     try{
         const ingredients = await getIngredients(req); // Pass req to getIngredients
         const ingredientsWithOwnProperties = ingredients.map(ingredient => ({...ingredient.dataValues}));
-        res.render('shoppingList', { ingredients: ingredientsWithOwnProperties });
+        // Check if the request is from a web browser
+        if (req.headers['user-agent'].includes('Mozilla')) {
+            // Render a view for web browsers
+            res.render('shoppingList', { ingredients: ingredientsWithOwnProperties });
+        } else {
+            // Return JSON for API clients
+            res.json({ ingredients: ingredientsWithOwnProperties });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
