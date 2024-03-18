@@ -98,22 +98,28 @@ app.use('/api', recipeStoreRouter);
 app.use(ingredientRoutes); // Ingredient-related APIs
 app.use('/api', shoppingListRoutes); // Shopping list-related APIs
 
-app.delete('/api/recipe/:id', (req, res) => {
-    const recipeId = req.params.id; // Move this line inside the route handler
+app.delete('/api/recipe/:id', async (req, res) => {
+    const recipeId = req.params.id; // Get the recipe ID from the request parameters
 
-    // Example: Delete the recipe from the database
-    RecipeStore.findByIdAndDelete(recipeId, (err, deletedRecipe) => {
-        if (err) {
-            return res.status(500).json({ error: 'Internal server error' });
-        }
+    try {
+        const deletedRows = await RecipeStore.destroy({
+            where: {
+                id: recipeId
+            }
+        });
 
-        if (!deletedRecipe) {
+        if (deletedRows === 0) {
+            // If no rows were deleted, the recipe with the specified ID was not found
             return res.status(404).json({ error: 'Recipe not found' });
         }
 
-        // Send a success response
+        // Send a success response if the recipe is successfully deleted
         res.status(200).json({ message: 'Recipe deleted successfully' });
-    });
+    } catch (error) {
+        // Handle any errors that occur during the deletion process
+        console.error('Error deleting recipe:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // Start the server
@@ -147,12 +153,18 @@ async function saveRecipe(req, res) {
         if (recipe) {
             const clonedRecipeData = { ...recipe.toJSON(), id: null };
             const savedRecipe = await RecipeStore.create(clonedRecipeData);
-            res.status(200).json({ message: 'Recipe saved successfully', savedRecipe });
+            // Set a success flash message
+            req.flash('success', 'Recipe saved successfully');
+            res.status(200).json({ savedRecipe });
         } else {
+            // Set an error flash message
+            req.flash('error', 'Recipe not found');
             res.status(404).json({ error: 'Recipe not found' });
         }
     } catch (error) {
         console.error('Error saving recipe:', error);
+        // Set an error flash message
+        req.flash('error', 'An error occurred while saving the recipe');
         res.status(500).json({ error: 'An error occurred while saving the recipe' });
     }
 }

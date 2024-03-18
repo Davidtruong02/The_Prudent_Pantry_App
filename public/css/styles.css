@@ -160,8 +160,26 @@ img {
     box-shadow: black 5px 5px 5px;
 }
 
-.save-recipe,
-.save-ingredients,
+.save-recipe {
+    width: 15%;
+    padding: 10px;
+    background-color: #ab3600;
+    color: #fff;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+
+.save-ingredients {
+    width: 15%;
+    padding: 10px;
+    background-color: #ab3600;
+    color: #fff;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
 .delete-btn {
     width: 30px;
     height: 30px;
@@ -179,8 +197,14 @@ img {
     z-index: 1; /* Ensure the delete button appears above the card */
 }
 
-.save-recipe:hover,
-.save-ingredients:hover,
+.save-recipe:hover {
+    background-color: #003e81;
+    color: #fff;
+}
+.save-ingredients:hover {
+    background-color: #003e81;
+    color: #fff;
+}
 .delete-btn:hover {
     background-color: #ff0000;
     color: #fff;

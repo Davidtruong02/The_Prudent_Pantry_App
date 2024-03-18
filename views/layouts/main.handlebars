@@ -1,11 +1,9 @@
-<!-- views/layouts/main.handlebars -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -16,7 +14,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/recipe" {{#if isRecipePage}}class="active"{{/if}}>Recipe Search</a></li>
             <li><a href="/recipestore" {{#if isRecipeStorePage}}class="active"{{/if}}>Recipe Store</a></li>
-            <li><a href="/shoppingList/{{userid}}" {{#if isShoppingListPage}}class="active"{{/if}}>Shopping List</a></li>
+            <li><a href="/shoppingList/{{ userid }}" {{#if isShoppingListPage}}class="active"{{/if}}>Shopping List</a></li>
             <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
             <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
                 <!-- CSRF protection if needed -->
@@ -29,40 +27,46 @@
         </ul>
     </nav>
 
-
-    
-
     <!-- Logout Form -->
     {{#if isLoggedIn}}
     <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     </form>
     {{/if}}
 </header>
-    
-    <div class="content">
-        {{{body}}}
-    </div>
 
-    <footer>
-        <p>&copy; 2024 The Prudent Pantry. All rights reserved.</p>
-    </footer>
-    
-    <!-- Include any scripts or additional content here -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-$(document).ready(function() {
-    // Attach a click event handler to the "Shopping List" link
-    $('#shoppingListLink').click(function(event) {
-        // Prevent the default action
-        event.preventDefault();
+<!-- Include flash messages -->
+{{#if successFlash}}
+    <div class="alert alert-success">{{ successFlash }}</div>
+{{/if}}
+{{#if errorFlash}}
+    <div class="alert alert-danger">{{ errorFlash }}</div>
+{{/if}}
 
-        // Make an AJAX call to /api/shoppinglist
-        $.get('/shoppinglist', function(data) {
-            // Do something with the data
-            console.log(data);
+<div class="content">
+    {{{ body }}}
+</div>
+
+<footer>
+    <p>&copy; 2024 The Prudent Pantry. All rights reserved.</p>
+</footer>
+
+<!-- Include any scripts or additional content here -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Attach a click event handler to the "Shopping List" link
+        $('#shoppingListLink').click(function(event) {
+            // Prevent the default action
+            event.preventDefault();
+
+            // Make an AJAX call to /api/shoppinglist
+            $.get('/shoppinglist', function(data) {
+                // Do something with the data
+                console.log(data);
+            });
         });
     });
-});
 </script>
 </body>
 </html>
