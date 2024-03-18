@@ -58,7 +58,7 @@ router.get('/recipe', async (req, res) => { // Defining a new route for fetching
         }
 
         // Storing the savedRecipes array in the session for later use
-        req.session.savedRecipes = savedRecipes;    // Storing the savedRecipes array in the session
+        // req.session.savedRecipes = savedRecipes;    // Storing the savedRecipes array in the session
 
         // Rendering the template with the fetched recipes
         res.render('recipe', { recipes: savedRecipes, nextHref: response.data?._links?.next?.href });   // Rendering the recipe template with the fetched recipes
