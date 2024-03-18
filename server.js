@@ -153,21 +153,18 @@ async function saveRecipe(req, res) {
         if (recipe) {
             const clonedRecipeData = { ...recipe.toJSON(), id: null };
             const savedRecipe = await RecipeStore.create(clonedRecipeData);
-            // Set a success flash message
+            // Set success flash message
             req.flash('success', 'Recipe saved successfully');
-            res.status(200).json({ savedRecipe });
+            res.status(200).json({ message: 'Recipe saved successfully', savedRecipe });
         } else {
-            // Set an error flash message
-            req.flash('error', 'Recipe not found');
             res.status(404).json({ error: 'Recipe not found' });
         }
     } catch (error) {
         console.error('Error saving recipe:', error);
-        // Set an error flash message
-        req.flash('error', 'An error occurred while saving the recipe');
         res.status(500).json({ error: 'An error occurred while saving the recipe' });
     }
 }
+
 
 // // Route handler to render the recipe store page
 async function getRecipeStore(req, res) {
