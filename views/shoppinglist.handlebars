@@ -1,13 +1,15 @@
 {{!-- Store the ingredients from shoppingRoutes.js in a card --}}
-<h5 class="card-title">Shopping List</h5>
-{{#each ingredients}}
-    <div class="card">
-        <div class="card-body">
+<h2 class="card-title">Shopping List</h2>
+<div class="card">
+    <div class="card-body">
+        {{#each ingredients}}
             <h5 class="card-title">{{this.name}}</h5>
             <!-- Other card content... -->
-        </div>
+        {{else}}
+            <p>Nothing added to the list yet.</p>
+        {{/each}}
     </div>
-{{/each}}
+</div>
 
 
 
