@@ -209,3 +209,4 @@ function clearSearchResults(req, res) {
     req.session.searchResults = null;
     res.json({ message: 'Stored search results cleared successfully' });
 }
+
