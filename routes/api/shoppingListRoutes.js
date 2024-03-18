@@ -12,14 +12,14 @@ async function getIngredients(req) {
         where: {
             user_id: userId
         },
-        attributes: ['id','name']
+        attributes: ['id', 'name']
     });
 }
 
 router.get('/', async (req, res) => {
-    try{
+    try {
         const ingredients = await getIngredients(req); // Pass req to getIngredients
-        const ingredientsWithOwnProperties = ingredients.map(ingredient => ({...ingredient.dataValues}));
+        const ingredientsWithOwnProperties = ingredients.map(ingredient => ({ ...ingredient.dataValues }));
         // Check if the request is from a web browser
         if (req.headers['user-agent'].includes('Mozilla')) {
             // Render a view for web browsers
@@ -34,6 +34,26 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const numDeleted = await Ingredients.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+
+        if (numDeleted) {
+            return res.status(200).json('Item deleted!');
+        } else {
+            return res.status(404).json('Item not found');
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).json('Server Error');
+    }
+});
+
+
 module.exports = router;
- 
+
 

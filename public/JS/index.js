@@ -1,3 +1,4 @@
+
 document.addEventListener('click', function (event) {
     if (event.target.matches('.save-ingredients')) {
         let recipeId = event.target.dataset.recipeId;
@@ -16,5 +17,19 @@ document.addEventListener('click', function (event) {
         .catch((error) => {
             console.error('Error:', error);
         });
+    }
+});
+
+// Add a click event listener to the delete button
+document.addEventListener('click', async function (event) {
+    if (event.target.classList.contains('delete-ingredient')) {
+        const ingredientId = event.target.getAttribute('data-ingredient-id');
+        console.log("This is the ingredientId :", ingredientId)
+        const response = await fetch('/shoppingList/delete/' + ingredientId, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            event.target.closest('.card').remove();
+        }
     }
 });
