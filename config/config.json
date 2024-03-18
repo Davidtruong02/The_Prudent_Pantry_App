@@ -1,15 +1,17 @@
+
 {
   "development": {
-    "username": "root",
-    "password": "",
+    "username": "t1cwfdwa5qkceyr8",
+    "password": "lz7hgpp1im6i0oxu",
     "database": "Pantry_db",
-    "host": "localhost",
+    "host": "wp433upk59nnhpoh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {
-   
+
   },
   "production": {
-   
+    "use_env_variable": "mysql://t1cwfdwa5qkceyr8:lz7hgpp1im6i0oxu@wp433upk59nnhpoh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/uixvd8zs165ibe3x",
+    "dialect": "mysql"
   }
 }
