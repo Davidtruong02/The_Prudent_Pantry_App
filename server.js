@@ -42,14 +42,25 @@ app.post('/login', async (req, res) => {
 });
 
 
+// Custom session store with customization to exclude recipeImage
+class CustomSessionStore extends SequelizeStore {
+    async createSession(sessionId, data) {
+        // Exclude recipeImage from session data
+        const newData = { ...data };
+        delete newData.recipeImage;
+
+        return super.createSession(sessionId, newData);
+    }
+}
+
 // Session setup
-const sess = { // Set the session options
-    secret: process.env.SESSION_SECRET || 'Super secret secret', // Set the session secret
-    cookie: {}, // Set the session cookie options
-    resave: false, // Set the session resave option
-    saveUninitialized: true, // Set the session saveUninitialized option
-    store: new SequelizeStore({ // Set the session store
-        db: sequelize, // Set the session store database
+const sess = {
+    secret: process.env.SESSION_SECRET || 'Super secret secret',
+    cookie: {},
+    resave: false,
+    saveUninitialized: true,
+    store: new CustomSessionStore({
+        db: sequelize,
     }),
 };
 app.use(session(sess)); // Use the express-session middleware with the session options
