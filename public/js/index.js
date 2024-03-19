@@ -3,7 +3,7 @@ document.addEventListener('click', function (event) {
     if (event.target.matches('.save-ingredients')) {
         let recipeId = event.target.dataset.recipeId;
 
-        fetch('/shoppingList', {
+        fetch('/shoppinglist', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
