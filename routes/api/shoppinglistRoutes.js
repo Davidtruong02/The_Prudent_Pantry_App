@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
         // Check if the request is from a web browser
         if (req.headers['user-agent'].includes('Mozilla')) {
             // Render a view for web browsers
-            res.render('shoppingList', { ingredients: ingredientsWithOwnProperties });
+            res.render('shoppinglist', { ingredients: ingredientsWithOwnProperties });
         } else {
             // Return JSON for API clients
             res.json({ ingredients: ingredientsWithOwnProperties });
