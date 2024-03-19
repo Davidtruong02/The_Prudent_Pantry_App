@@ -25,7 +25,7 @@ document.addEventListener('click', async function (event) {
     if (event.target.classList.contains('delete-ingredient')) {
         const ingredientId = event.target.getAttribute('data-ingredient-id');
         console.log("This is the ingredientId :", ingredientId)
-        const response = await fetch('/shoppingList/delete/' + ingredientId, {
+        const response = await fetch('/shoppinglist/delete/' + ingredientId, {
             method: 'DELETE'
         });
         if (response.ok) {
