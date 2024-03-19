@@ -135,7 +135,7 @@ app.delete('/api/recipe/:id', async (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 3001; // Set the server port
-sequelize.sync({ force: false }).then(() => { // Sync the database and start the server
+sequelize.sync({ force: true }).then(() => { // Sync the database and start the server
     app.listen(PORT, () => { // Start the server
         console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`); // Log a message to the console
     });
