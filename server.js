@@ -14,8 +14,8 @@ const Recipe = require('./models/Recipe'); // Import the Recipe model
 const RecipeStore = require('./models/RecipeStore'); // Import the RecipeStore model
 const recipeStoreRouter = require('./routes/api/recipeStoreRoute');
 const ingredientRoutes = require('./routes/api/ingredientRoutes'); // Import the ingredientRoutes module
-const shoppingListRoutes = require('./routes/api/shoppingListRoutes'); // Import the shoppingListRoutes module
-const ShoppingList = require('./models/shoppingList'); // Import the ShoppingList model
+const shoppingListRoutes = require('./routes/api/shoppinglistRoutes'); // Import the shoppingListRoutes module
+const ShoppingList = require('./models/shoppinglist'); // Import the ShoppingList model
 const Ingredients = require('./models/Ingredients'); // Import the Ingredients model
 
 
@@ -100,7 +100,7 @@ app.post('/api/store-search-results', storeSearchResults); // Store search resul
 app.get('/api/display-search-results', displaySearchResults); // Display search results route
 app.get('/api/clear-search-results', clearSearchResults); // Clear search results route
 // app.get('/shoppingList', isAuthenticated, (req, res) => res.render('shoppingList', { title: 'Shopping List', isShoppingListPage: true })); // Shopping list page route
-app.use('/shoppingList', require('./routes/api/shoppingListRoutes')); // Use the shoppingListRoutes module for shopping list-related routes
+app.use('/shoppinglist', require('./routes/api/shoppingListRoutes')); // Use the shoppingListRoutes module for shopping list-related routes
 
 
 
