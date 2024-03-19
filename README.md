@@ -91,6 +91,14 @@ This application integrates with the Edamam Recipe API to provide recipe search 
 
 The application is deployed on Heroku and uses JawsDB for the database. You can access it [here](https://the-prudent-pantry-app-cd8c3bb4b9ad.herokuapp.com).
 
+## Images
+
+![alt text](assets\images\LoginSS.png)
+![Alt text](assets\images\recipedata.png)
+![Alt text](assets\images\RecipeSearchPage.png)
+![Alt text](assets\images\RecipeStore.png)
+![Alt text](assets\images\SavedRecipe.png)
+![Alt text](assets\images\ShoppingList.png)
 ## License
 
 MIT License
