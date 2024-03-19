@@ -28,6 +28,6 @@ List.init(
         timestamps: false,
         freezeTableName: true,
         underscored: true,
-        modelName: 'list'
+        modelName: 'shoppinglist'
     }
 );
