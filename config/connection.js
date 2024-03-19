@@ -19,19 +19,3 @@ if (process.env.JAWSDB_URL) {
 }
 
 module.exports = sequelize;
-
-
-
-
-// const { Sequelize } = require('sequelize');
-
-// const sequelize = new Sequelize({
-//   dialect: 'mysql',
-//   host: 'wp433upk59nnhpoh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-//   port: 3306,
-//   database: 'uixvd8zs165ibe3x',
-//   username: 't1cwfdwa5qkceyr8',
-//   password: 'lz7hgpp1im6i0oxu',
-// });
-
-// module.exports = sequelize;
