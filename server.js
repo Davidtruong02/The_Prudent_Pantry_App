@@ -14,7 +14,7 @@ const Recipe = require('./models/Recipe'); // Import the Recipe model
 const RecipeStore = require('./models/RecipeStore'); // Import the RecipeStore model
 const recipeStoreRouter = require('./routes/api/recipeStoreRoute');
 const ingredientRoutes = require('./routes/api/ingredientRoutes'); // Import the ingredientRoutes module
-const shoppingListRoutes = require('./routes/api/shoppinglistRoutes'); // Import the shoppingListRoutes module
+const shoppinglistRoutes = require('./routes/api/shoppinglistRoutes'); // Import the shoppingListRoutes module
 const ShoppingList = require('./models/shoppinglist'); // Import the ShoppingList model
 const Ingredients = require('./models/Ingredients'); // Import the Ingredients model
 
@@ -100,14 +100,14 @@ app.post('/api/store-search-results', storeSearchResults); // Store search resul
 app.get('/api/display-search-results', displaySearchResults); // Display search results route
 app.get('/api/clear-search-results', clearSearchResults); // Clear search results route
 // app.get('/shoppingList', isAuthenticated, (req, res) => res.render('shoppingList', { title: 'Shopping List', isShoppingListPage: true })); // Shopping list page route
-app.use('/shoppinglist', require('./routes/api/shoppingListRoutes')); // Use the shoppingListRoutes module for shopping list-related routes
+app.use('/shoppinglist', require('./routes/api/shoppinglistRoutes')); // Use the shoppingListRoutes module for shopping list-related routes
 
 
 
 app.use('/api', recipeRoutes); // Recipe-related APIs
 app.use('/api', recipeStoreRouter);
 app.use(ingredientRoutes); // Ingredient-related APIs
-app.use('/api', shoppingListRoutes); // Shopping list-related APIs
+app.use('/api', shoppinglistRoutes); // Shopping list-related APIs
 
 app.delete('/api/recipe/:id', async (req, res) => {
     const recipeId = req.params.id; // Get the recipe ID from the request parameters
@@ -135,7 +135,7 @@ app.delete('/api/recipe/:id', async (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 3001; // Set the server port
-sequelize.sync({ force: true }).then(() => { // Sync the database and start the server
+sequelize.sync({ force: false }).then(() => { // Sync the database and start the server
     app.listen(PORT, () => { // Start the server
         console.log(`Server is running on port ${PORT}. Visit http://localhost:${PORT} in your browser.`); // Log a message to the console
     });
