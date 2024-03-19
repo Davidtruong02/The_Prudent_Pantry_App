@@ -93,7 +93,7 @@ The application is deployed on Heroku and uses JawsDB for the database. You can 
 
 ## Images
 
-![alt text](assets\images\LoginSS.png)
+![screenshot](assets\images\LoginSS.png)
 ![Alt text](assets\images\recipedata.png)
 ![Alt text](assets\images\RecipeSearchPage.png)
 ![Alt text](assets\images\RecipeStore.png)
