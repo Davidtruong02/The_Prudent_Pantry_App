@@ -1,3 +1,14 @@
+// JavaScript to get the next 20 recipes
+const form = document.getElementById('searchForm');
+const nextButton = document.getElementById('nextPage');
+
+nextButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    form.submit();
+});
+
+
+
 // JavaScript code for saving recipes
 document.addEventListener('DOMContentLoaded', function() { // Wait for the DOM to load
     const saveRecipeButtons = document.querySelectorAll('.save-recipe'); // Get all "Save Recipe" buttons
