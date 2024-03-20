@@ -50,7 +50,7 @@ The Prudent Pantry App is a web application designed to help users discover and 
    npm start
    ```
 
- Open your browser and navigate to `http://localhost:3000` to access the application.
+ Open your browser and navigate to `http://localhost:3001` to access the application.
 
 ## Dependencies
 
@@ -93,7 +93,7 @@ The application is deployed on Heroku and uses JawsDB for the database. You can 
 
 ## Images
 
-![screenshot](assets\images\LoginSS.png)
+![screenshot](https://github.com/Davidtruong02/The_Prudent_Pantry_App/blob/main/assets/images/LoginSS.png)
 ![Alt text](assets\images\recipedata.png)
 ![Alt text](assets\images\RecipeSearchPage.png)
 ![Alt text](assets\images\RecipeStore.png)
