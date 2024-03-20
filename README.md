@@ -93,12 +93,13 @@ The application is deployed on Heroku and uses JawsDB for the database. You can 
 
 ## Images
 
-![screenshot](https://github.com/Davidtruong02/The_Prudent_Pantry_App/blob/main/assets/images/LoginSS.png)
-![Alt text](assets\images\recipedata.png)
-![Alt text](assets\images\RecipeSearchPage.png)
-![Alt text](assets\images\RecipeStore.png)
-![Alt text](assets\images\SavedRecipe.png)
-![Alt text](assets\images\ShoppingList.png)
+<img src="https://github.com/Davidtruong02/The_Prudent_Pantry_App/raw/main/assets/images/LoginSS.png" alt="screenshot" width="100" height="100">
+<img src="https://github.com/Davidtruong02/The_Prudent_Pantry_App/raw/main/assets/images/RecipeSearchPage.png" alt="Recipe Search Page" width="200" height="200">
+<img src="https://github.com/Davidtruong02/The_Prudent_Pantry_App/raw/main/assets/images/RecipeStore.png" alt="Recipe Store" width="200" height="200">
+<img src="https://github.com/Davidtruong02/The_Prudent_Pantry_App/raw/main/assets/images/SavedRecipe.png" alt="Saved Recipe" width="200" height="200">
+<img src="https://github.com/Davidtruong02/The_Prudent_Pantry_App/raw/main/assets/images/ShoppingList.png" alt="Shopping List" width="200" height="200">
+<img src="https://github.com/Davidtruong02/The_Prudent_Pantry_App/raw/main/assets/images/recipedata.png" alt="Recipe Data" width="200" height="200">
+
 ## License
 
 MIT License
